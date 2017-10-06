@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tkooops</title>
+  <title>在chromium项目中支持gcov单测覆盖率 | Tkooops</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="归来仍少年">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Tkooops">
-<meta property="og:url" content="http://kkrisen.top/index.html">
+  <meta name="description" content="简单介绍一下gcov和lcovgcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。对可执行文件进行一次运行，即可得到.gcda文件最终，用gcov工具对源代码进行处理，得到.gcov文件，即">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在chromium项目中支持gcov单测覆盖率">
+<meta property="og:url" content="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/index.html">
 <meta property="og:site_name" content="Tkooops">
-<meta property="og:description" content="归来仍少年">
+<meta property="og:description" content="简单介绍一下gcov和lcovgcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。对可执行文件进行一次运行，即可得到.gcda文件最终，用gcov工具对源代码进行处理，得到.gcov文件，即">
+<meta property="og:updated_time" content="2017-10-06T12:30:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Tkooops">
-<meta name="twitter:description" content="归来仍少年">
+<meta name="twitter:title" content="在chromium项目中支持gcov单测覆盖率">
+<meta name="twitter:description" content="简单介绍一下gcov和lcovgcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。对可执行文件进行一次运行，即可得到.gcda文件最终，用gcov工具对源代码进行处理，得到.gcov文件，即">
   
     <link rel="alternate" href="/atom.xml" title="Tkooops" type="application/atom+xml">
   
@@ -66,9 +67,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-在chromium项目中支持gcov单测覆盖率" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-在chromium项目中支持gcov单测覆盖率" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/20171006/在chromium项目中支持gcov单测覆盖率.html/" class="article-date">
   <time datetime="2017-10-06T12:19:59.000Z" itemprop="datePublished">2017-10-06</time>
@@ -81,8 +80,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/20171006/在chromium项目中支持gcov单测覆盖率.html/">在chromium项目中支持gcov单测覆盖率</a>
+    <h1 class="article-title" itemprop="name">
+      在chromium项目中支持gcov单测覆盖率
     </h1>
   
 
@@ -136,267 +135,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-Cronet-httpCache基本逻辑" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/20171006/Cronet-httpCache基本逻辑.html/" class="article-date">
-  <time datetime="2017-10-06T08:53:05.000Z" itemprop="datePublished">2017-10-06</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/20171006/Cronet-httpCache基本逻辑.html/">Cronet-httpCache基本逻辑</a>
-    </h1>
+    <a href="/20171006/Cronet-httpCache基本逻辑.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Cronet-httpCache基本逻辑</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>对Cronet中如何做http cache做了一个梳理解析.<br>先介绍一下Cronet网络库的启动流程<br><img src="cronet-httpcache.jpg" alt="Cronet-httpcache"><br>以Android举例，如上图，Cronet是一个单线程网络库，在java层存在唯一的CronetEngine，在C++层存在唯一的URLRequestContext，它们是网络库最核心的上下文。<br></p>
-        
-          <p class="article-more-link">
-            <a href="/20171006/Cronet-httpCache基本逻辑.html/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/" data-id="cj8fvd5r700001d9kywx7ohu6" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-Cronet-http-header相关逻辑梳理" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/20171006/Cronet-http-header相关逻辑梳理.html/" class="article-date">
-  <time datetime="2017-10-06T08:26:48.000Z" itemprop="datePublished">2017-10-06</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/20171006/Cronet-http-header相关逻辑梳理.html/">Cronet http-header相关逻辑梳理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>本章梳理Cronet对于http header的处理逻辑。包含Android &amp; iOS两个平台。<br></p>
-        
-          <p class="article-more-link">
-            <a href="/20171006/Cronet-http-header相关逻辑梳理.html/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/Cronet-http-header相关逻辑梳理.html/" data-id="cj8fvd5rd00011d9k3u814bcv" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Cronet代码解析-URLRequest" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/20171005/Cronet代码解析-URLRequest.html/" class="article-date">
-  <time datetime="2017-10-05T09:46:05.000Z" itemprop="datePublished">2017-10-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/20171005/Cronet代码解析-URLRequest.html/">Cronet代码解析-URLRequest</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>Cronet是chromium的网络协议栈，具有如下特点。</p>
-<ul>
-<li><p>提供了从传输层到应用层的完整网络库功能。</p>
-</li>
-<li><p>极佳的跨平台性，覆盖所有主流操作系统：iOS, Android, linux, macOS, win。</p>
-</li>
-<li><p>除了应用层由于支持跨平台，使用了不同语言封装（java | objective-C），底层共用一套C++代码，性能很高。</p>
-</li>
-<li><p>提供多种协议支持:http/spdy/quic等。</p>
-</li>
-</ul>
-<p>最重要的是，这个项目Google开源出来了。<br>其中，http协议常用的请求方式为使用URLRequest，本章用于记录对URLRequest代码的学习分析。<br></p>
-        
-          <p class="article-more-link">
-            <a href="/20171005/Cronet代码解析-URLRequest.html/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171005/Cronet代码解析-URLRequest.html/" data-id="cj8fvd5rg00021d9kuluwbalo" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-twemproxy部署效率的优化实践" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/20170924/twemproxy部署效率的优化实践.html/" class="article-date">
-  <time datetime="2017-09-24T15:56:25.000Z" itemprop="datePublished">2017-09-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/20170924/twemproxy部署效率的优化实践.html/">twemproxy部署效率的优化实践</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>twemproxy是twitter开源出来的一款用于存储集群的反向代理。常见于Redis集群，加入了twemproxy的Redis集群其请求流程可以简化为：用户-&gt;twemproxy-&gt;Redis，用户只需要与twemproxy建立连接并发送请求，twemproxy通过配置在自身的路由表及均衡策略，将请求转发至相应后端。</p>
-<p>本章主要记录一下实习时做的一个twemproxy批量部署脚本，其目的是节省运维人力，提升新建Redis集群速度。</p>
-<h2 id="一些前提"><a href="#一些前提" class="headerlink" title="一些前提"></a>一些前提</h2><p>公司内的Redis集群并不是使用的纯开源的，而是基于开源代码自研的，其中就包括Redis中控（类似于开源里的sentinel）。</p>
-<p>另外有个用于集群管理的paas平台，在使用该脚本进行部署前，已经通过平台将Redis及twemproxy配置写入了Redis中控。主要的信息包括待部署的机器ip、端口、实例路由表（Redis）<br></p>
-        
-          <p class="article-more-link">
-            <a href="/20170924/twemproxy部署效率的优化实践.html/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8fvd5s500061d9kgq74lgub" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Redis-sync" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/20170924/Redis-sync.html/" class="article-date">
-  <time datetime="2017-09-24T03:06:58.000Z" itemprop="datePublished">2017-09-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/20170924/Redis-sync.html/">Redis-sync</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>Redis是一个内存型KV存储，以其高性能特性得到广泛应用。作为数据库，主从同步一直是一个非常核心的功能。其主从同步是基于最终一致性。</p>
-<p>本章主要是主从同步相关流程和代码的分析，内容写于2015年基于Redis 2.6版本。<br></p>
-        
-          <p class="article-more-link">
-            <a href="/20170924/Redis-sync.html/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/Redis-sync.html/" data-id="cj8fvd5rw00031d9ke5uxf21m" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/20170919/hello-world.html/" class="article-date">
-  <time datetime="2017-09-19T15:40:22.000Z" itemprop="datePublished">2017-09-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/20170919/hello-world.html/">Maybe another beginning</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近发生了很多，想了也很多。也早该开始做一些事情去积累和沉淀。希望这是一个新的开始。<br>Hope, confidence and passion.<br>Tkooops.</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170919/hello-world.html/" data-id="cj8fvd5s300051d9k68wo98rz" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 </section>
         
