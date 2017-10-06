@@ -12,9 +12,9 @@
 <meta property="og:site_name" content="Tkooops">
 <meta property="og:description" content="背景对Cronet中如何做http cache做了一个梳理解析.先介绍一下Cronet网络库的启动流程以Android举例，如上图，Cronet是一个单线程网络库，在java层存在唯一的CronetEngine，在C++层存在唯一的URLRequestContext，它们是网络库最核心的上下文。">
 <meta property="og:image" content="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/cronet-httpcache.jpg">
-<meta property="og:image" content="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/Cronet-httpCache基本逻辑/cronet-rfc.jpg">
-<meta property="og:image" content="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/Cronet-httpCache基本逻辑/cronet-chromium-discuss.jpg">
-<meta property="og:updated_time" content="2017-10-06T12:14:03.000Z">
+<meta property="og:image" content="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/cronet-rfc.jpg">
+<meta property="og:image" content="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/cronet-chromium-discuss.jpg">
+<meta property="og:updated_time" content="2017-10-06T12:15:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cronet-httpCache基本逻辑">
 <meta name="twitter:description" content="背景对Cronet中如何做http cache做了一个梳理解析.先介绍一下Cronet网络库的启动流程以Android举例，如上图，Cronet是一个单线程网络库，在java层存在唯一的CronetEngine，在C++层存在唯一的URLRequestContext，它们是网络库最核心的上下文。">
@@ -104,9 +104,9 @@
 <p>因此，cronet本身实际上把identifier关闭了（置0），使得所有依赖该值的功能都是失效的，包括post请求使用httpcache</p>
 <h4 id="佐证材料"><a href="#佐证材料" class="headerlink" title="佐证材料"></a>佐证材料</h4><p>先找一个相关的资料</p>
 <ul>
-<li><p>http协议文档<br><img src="Cronet-httpCache基本逻辑/cronet-rfc.jpg" alt="RFC"><br>来自rfc7234:[<a href="https://www.rfc-editor.org/rfc/pdfrfc/rfc7234.txt.pdf" target="_blank" rel="external">https://www.rfc-editor.org/rfc/pdfrfc/rfc7234.txt.pdf</a>]</p>
+<li><p>http协议文档<br><img src="/20171006/Cronet-httpCache基本逻辑.html/cronet-rfc.jpg" alt="RFC"><br>来自rfc7234:[<a href="https://www.rfc-editor.org/rfc/pdfrfc/rfc7234.txt.pdf" target="_blank" rel="external">https://www.rfc-editor.org/rfc/pdfrfc/rfc7234.txt.pdf</a>]</p>
 </li>
-<li><p>chromium-discuss资料<br><img src="Cronet-httpCache基本逻辑/cronet-chromium-discuss.jpg" alt="chromium-discuss"><br>[<a href="https://bugs.chromium.org/p/chromium/issues/detail?id=513164" target="_blank" rel="external">https://bugs.chromium.org/p/chromium/issues/detail?id=513164</a>]</p>
+<li><p>chromium-discuss资料<br><img src="/20171006/Cronet-httpCache基本逻辑.html/cronet-chromium-discuss.jpg" alt="chromium-discuss"><br>[<a href="https://bugs.chromium.org/p/chromium/issues/detail?id=513164" target="_blank" rel="external">https://bugs.chromium.org/p/chromium/issues/detail?id=513164</a>]</p>
 </li>
 </ul>
 <p>由http协议对httpcache的介绍来看，协议层是没有对使用httpcache的方法类型做限制的。</p>
