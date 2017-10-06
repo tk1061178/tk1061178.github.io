@@ -68,6 +68,48 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-使用python-unidiff库分析git-diff" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/20171006/使用python-unidiff库分析git-diff.html/" class="article-date">
+  <time datetime="2017-10-06T15:09:53.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/20171006/使用python-unidiff库分析git-diff.html/">使用python unidiff库分析git diff</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>这里分享一个python写的分离特定的git修改的方法。<br>主要应用的问题是当时项目组需要同步chromium最新代码，结果带来了巨大量的改动，为了节省我们review新代码的时间，需要将一些不重要的修改（携带某种特征，例如新版本的chromium大量替换了智能指针，将自研的scoped_ptr变成了std::unique_ptr）分离出来，剩下的就是重要的修改了。</p>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>这里主要用到python的unidiff库，这个库可以解析出标准的unified diff data，git diff恰好就是这个格式。<br></p>
+        
+          <p class="article-more-link">
+            <a href="/20171006/使用python-unidiff库分析git-diff.html/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/20171006/使用python-unidiff库分析git-diff.html/" data-id="cj8g1dqi900033y9k7eb9pgnb" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-在chromium项目中支持gcov单测覆盖率" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/20171006/在chromium项目中支持gcov单测覆盖率.html/" class="article-date">
@@ -101,7 +143,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8fvd5ry00041d9k710fdf32" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8g1dqik00073y9k4kqtk0fy" class="article-share-link">Share</a>
       
       
     </footer>
@@ -142,7 +184,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/" data-id="cj8fvd5r700001d9kywx7ohu6" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/" data-id="cj8g1dqhz00013y9khj310p0n" class="article-share-link">Share</a>
       
       
     </footer>
@@ -183,7 +225,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/Cronet-http-header相关逻辑梳理.html/" data-id="cj8fvd5rd00011d9k3u814bcv" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/Cronet-http-header相关逻辑梳理.html/" data-id="cj8g1dqhu00003y9ko3zskpic" class="article-share-link">Share</a>
       
       
     </footer>
@@ -235,7 +277,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171005/Cronet代码解析-URLRequest.html/" data-id="cj8fvd5rg00021d9kuluwbalo" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171005/Cronet代码解析-URLRequest.html/" data-id="cj8g1dqi200023y9kwls3ees4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -279,7 +321,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8fvd5s500061d9kgq74lgub" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8g1dqii00063y9kchuh5j5j" class="article-share-link">Share</a>
       
       
     </footer>
@@ -321,7 +363,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/Redis-sync.html/" data-id="cj8fvd5rw00031d9ke5uxf21m" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20170924/Redis-sync.html/" data-id="cj8g1dqih00053y9kccfoa7sa" class="article-share-link">Share</a>
       
       
     </footer>
@@ -358,7 +400,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170919/hello-world.html/" data-id="cj8fvd5s300051d9k68wo98rz" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20170919/hello-world.html/" data-id="cj8g1dqic00043y9kyxpzm6wc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -398,6 +440,10 @@
       <ul>
         
           <li>
+            <a href="/20171006/使用python-unidiff库分析git-diff.html/">使用python unidiff库分析git diff</a>
+          </li>
+        
+          <li>
             <a href="/20171006/在chromium项目中支持gcov单测覆盖率.html/">在chromium项目中支持gcov单测覆盖率</a>
           </li>
         
@@ -411,10 +457,6 @@
         
           <li>
             <a href="/20171005/Cronet代码解析-URLRequest.html/">Cronet代码解析-URLRequest</a>
-          </li>
-        
-          <li>
-            <a href="/20170924/twemproxy部署效率的优化实践.html/">twemproxy部署效率的优化实践</a>
           </li>
         
       </ul>
