@@ -55,9 +55,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://kkrisen.top"></form>
@@ -67,6 +67,47 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Cronet-httpCache基本逻辑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/20171006/Cronet-httpCache基本逻辑.html/" class="article-date">
+  <time datetime="2017-10-06T08:53:05.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/20171006/Cronet-httpCache基本逻辑.html/">Cronet-httpCache基本逻辑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>对Cronet中如何做http cache做了一个梳理解析.<br>先介绍一下Cronet网络库的启动流程<br><img src="Cronet-httpCache基本逻辑/cronet-httpcache.png" alt="Cronet-httpcache"><br>以Android举例，如上图，Cronet是一个单线程网络库，在java层存在唯一的CronetEngine，在C++层存在唯一的URLRequestContext，它们是网络库最核心的上下文。<br></p>
+        
+          <p class="article-more-link">
+            <a href="/20171006/Cronet-httpCache基本逻辑.html/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/" data-id="cj8fou1dt0000gq9kbjm4lqq4" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Cronet-http-header相关逻辑梳理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -99,7 +140,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/Cronet-http-header相关逻辑梳理.html/" data-id="cj8fmokec00000l9kbchp7th6" class="article-share-link">Partager</a>
+      <a data-url="http://kkrisen.top/20171006/Cronet-http-header相关逻辑梳理.html/" data-id="cj8fou1e30002gq9k7ruwk2gz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -151,7 +192,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171005/Cronet代码解析-URLRequest.html/" data-id="cj8fmokeh00010l9k1a754fs6" class="article-share-link">Partager</a>
+      <a data-url="http://kkrisen.top/20171005/Cronet代码解析-URLRequest.html/" data-id="cj8fou1ef0005gq9k2h4hk8th" class="article-share-link">Share</a>
       
       
     </footer>
@@ -195,7 +236,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8fmokeo00040l9kjtx90ssr" class="article-share-link">Partager</a>
+      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8fou1e90003gq9ka1k8r5u8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -237,7 +278,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/Redis-sync.html/" data-id="cj8fmokek00020l9kqpnnd89s" class="article-share-link">Partager</a>
+      <a data-url="http://kkrisen.top/20170924/Redis-sync.html/" data-id="cj8fou1ec0004gq9ka84wdl62" class="article-share-link">Share</a>
       
       
     </footer>
@@ -274,7 +315,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170919/hello-world.html/" data-id="cj8fmokem00030l9k111brx9r" class="article-share-link">Partager</a>
+      <a data-url="http://kkrisen.top/20170919/hello-world.html/" data-id="cj8fou1dy0001gq9kyh29ltox" class="article-share-link">Share</a>
       
       
     </footer>
@@ -309,9 +350,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/20171006/Cronet-httpCache基本逻辑.html/">Cronet-httpCache基本逻辑</a>
+          </li>
         
           <li>
             <a href="/20171006/Cronet-http-header相关逻辑梳理.html/">Cronet http-header相关逻辑梳理</a>
@@ -329,10 +374,6 @@
             <a href="/20170924/Redis-sync.html/">Redis-sync</a>
           </li>
         
-          <li>
-            <a href="/20170919/hello-world.html/">Maybe another beginning</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -346,7 +387,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 Krisen Tan<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
