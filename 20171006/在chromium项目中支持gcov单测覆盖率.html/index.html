@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/index.html">
 <meta property="og:site_name" content="Tkooops">
 <meta property="og:description" content="简单介绍一下gcov和lcovgcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。对可执行文件进行一次运行，即可得到.gcda文件最终，用gcov工具对源代码进行处理，得到.gcov文件，即">
-<meta property="og:updated_time" content="2017-10-06T12:30:45.000Z">
+<meta property="og:updated_time" content="2017-10-06T12:33:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在chromium项目中支持gcov单测覆盖率">
 <meta name="twitter:description" content="简单介绍一下gcov和lcovgcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。对可执行文件进行一次运行，即可得到.gcda文件最终，用gcov工具对源代码进行处理，得到.gcov文件，即">
@@ -91,9 +91,10 @@
       
         <h4 id="简单介绍一下gcov和lcov"><a href="#简单介绍一下gcov和lcov" class="headerlink" title="简单介绍一下gcov和lcov"></a>简单介绍一下gcov和lcov</h4><p>gcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用<br>在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能<br>在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。<br>对可执行文件进行一次运行，即可得到.gcda文件<br>最终，用gcov工具对源代码进行处理，得到.gcov文件，即为我们需要的覆盖信息的初试状态</p>
 <p>因为gcov生成的是纯文字，不好直观展现，lcov工具就是在gcov的基础上，生成html做了界面化展现。</p>
-<h4 id="cronet使用lcov本地跑单测覆盖率"><a href="#cronet使用lcov本地跑单测覆盖率" class="headerlink" title="cronet使用lcov本地跑单测覆盖率"></a>cronet使用lcov本地跑单测覆盖率</h4><h6 id="准备材料："><a href="#准备材料：" class="headerlink" title="准备材料："></a>准备材料：</h6><blockquote>
-<p>lcov 1.10版本<br>gcc 4.8.1及以上版本</p>
-</blockquote>
+<h4 id="cronet使用lcov本地跑单测覆盖率"><a href="#cronet使用lcov本地跑单测覆盖率" class="headerlink" title="cronet使用lcov本地跑单测覆盖率"></a>cronet使用lcov本地跑单测覆盖率</h4><h6 id="准备材料："><a href="#准备材料：" class="headerlink" title="准备材料："></a>准备材料：</h6><ul>
+<li>lcov 1.10版本</li>
+<li>gcc 4.8.1及以上版本</li>
+</ul>
 <h6 id="实现步骤："><a href="#实现步骤：" class="headerlink" title="实现步骤："></a>实现步骤：</h6><p>在build.gn中添加全局编译参数</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//build/config/BUILDCONFIG.gn</span></div><div class="line">  <span class="keyword">if</span> (is_linux &amp;&amp; enable_coverage) &#123;</div><div class="line">	_native_compiler_configs += [ <span class="string">"//build/config:gcov"</span> ]</div><div class="line">	use_sysroot = <span class="literal">false</span></div><div class="line">	assert(!use_sysroot, <span class="string">"sysroot images require clang, so disable it."</span>)</div><div class="line">	assert(is_debug, <span class="string">"Target should be compiled in debug mode."</span>)</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//build/config/BUILD.gn</span></div><div class="line">  config(<span class="string">"gcov"</span>) &#123;</div><div class="line">	cflags = [ <span class="string">"-fprofile-arcs"</span>, <span class="string">"-ftest-coverage"</span> ]</div><div class="line">	libs = [ <span class="string">"gcov"</span> ]</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
@@ -101,30 +102,44 @@
 <p>执行gcov.sh，本地化lcov工具脚本<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span>/bin/bash</div><div class="line">test_model="bdns_unittests"  #需要编译的模块名</div><div class="line">out_dir="./"  #编译输出目录</div><div class="line">COVERAGE_DIR="./out_html"  #lcov输出文件夹</div><div class="line">ninja -C $out_dir -j 11 $test_model  #使用ninja进行编译</div><div class="line">lcov -b ./ -c -i -d ./ -o coverage.init  #使用lcov先跑一遍初始数据（处理gcno，信息输出到coverage.init）</div><div class="line"><span class="meta">$</span>out_dir$test_model --test-launcher-jobs=11 --test-launcher-retry-limit=0  #运行可执行文件</div><div class="line">lcov  -b ./ -c -d ./ -o coverage.run  #再跑一遍lcov（处理gcda，信息输出到coverage.run）</div><div class="line">lcov -a coverage.init -a coverage.run -o coverage.total  #两个文件合并成coverage.total</div><div class="line">genhtml coverage.total --output-directory $COVERAGE_DIR --title "TurboNet Test Coverage" --show-details   </div><div class="line">--legend  #产出html</div></pre></td></tr></table></figure></p>
 <p>最终，在out_html下就有我们需要的产出，以html形式。</p>
 <h4 id="踩坑点"><a href="#踩坑点" class="headerlink" title="踩坑点"></a>踩坑点</h4><p>1.pkg-config could not run</p>
-<blockquote>
-<p>chromium为了更好支持跨机器，使用了pkg-config这个编译辅助工具，目的是为了快速找到编译依赖包。<br>在配置完gn后，可能会出现xxx.pc无法找到，pkg-config cound not run的错误<br>solution:<br>去了解了一下pkg-config的作用后，明白这个错误其实就是环境变量没有添加好<br>在/usr下找到所有xxx.pc的鬼东西，将其所在目录路径（可能是多个）添加到 export PKG_CONFIG_PATH中去</p>
-</blockquote>
+<ul>
+<li>chromium为了更好支持跨机器，使用了pkg-config这个编译辅助工具，目的是为了快速找到编译依赖包。</li>
+<li>在配置完gn后，可能会出现xxx.pc无法找到，pkg-config cound not run的错误<br>solution:</li>
+<li>去了解了一下pkg-config的作用后，明白这个错误其实就是环境变量没有添加好</li>
+<li>在/usr下找到所有xxx.pc的鬼东西，将其所在目录路径（可能是多个）添加到 export PKG_CONFIG_PATH中去</li>
+</ul>
 <p>2.gcc/g++版本请务必使用4.8.1及以上的，为了支持C++11(gcc/g++ 4.6只认识-std=c++0x，这是C++11的早期标识，正式的是-std=gnu++11).</p>
-<blockquote>
-<p>如果不升级，会报一堆gcc的运行参数错误<br>ps.最开始不知道为啥我机器上4.6版本不支持c++11,后来找了一些资料才知道4.8.1之前的版本只认识早期c++11或者c++0x这种标识，官方推荐的应该是gnu++11，只在gcc 4.8.1开始</p>
-</blockquote>
+<ul>
+<li>如果不升级，会报一堆gcc的运行参数错误</li>
+<li>ps.最开始不知道为啥我机器上4.6版本不支持c++11,后来找了一些资料才知道4.8.1之前的版本只认识早期c++11或者c++0x这种标识，官方推荐的应该是gnu++11，只在gcc 4.8.1开始</li>
+</ul>
 <p>3.升级gcc后，可能你的gcov版本还是老版本（比如4.6）通过gcc/gcov -v可以查看版本。但其实你机器上已经存在了gcov-4.8了，可以去/usr/bin下查看</p>
-<blockquote>
-<p>如果gcc和gcov版本不一致，在gcov运行阶段，会报版本错误，可能最终能生成html，但覆盖率数据会有问题<br>solution：<br>替换/usr/bin下的gcov，这个gcov仅仅是一个软连接，删除它，新建一个gcov的软连接指向gcov-4.8即可</p>
-</blockquote>
+<ul>
+<li>如果gcc和gcov版本不一致，在gcov运行阶段，会报版本错误，可能最终能生成html，但覆盖率数据会有问题<br>solution：</li>
+<li>替换/usr/bin下的gcov，这个gcov仅仅是一个软连接，删除它，新建一个gcov的软连接指向gcov-4.8即可</li>
+</ul>
 <p>4.lcov版本问题，1.9版本的会出错</p>
-<blockquote>
-<p>lcov1.9版本有代码bug（网上可以搜到，包括已经提交到了lcov官方），使用它可能会出现<br>geninfo: ERROR: xxx.gcno:reached unexpected end of file<br>solution:<br>使用lcov1.10版本，不会出现这个问题</p>
-</blockquote>
+<ul>
+<li>lcov1.9版本有代码bug（网上可以搜到，包括已经提交到了lcov官方），使用它可能会出现</li>
+<li>geninfo: ERROR: xxx.gcno:reached unexpected end of file<br>solution:</li>
+<li>使用lcov1.10版本，不会出现这个问题</li>
+</ul>
 <p>5.gcov编译参数一定要加全局<br>cflags = [ “-fprofile-arcs”, “-ftest-coverage” ]这个编译参数一定要加到全局<br>当时为了节省效率，只对需要产出覆盖率的那部分source代码加上了gcov的编译参数<br>problem：</p>
-<blockquote>
-<p>这样做确实会节省很多时间，主要是在gcov处理方面会很快（只有你加了编译参数的source才会产出.gcno/.gcda文件）<br>但是在真正运行时，会导致所有的ut全部crash<br>solution：<br>直接把编译参数加到全局（黄龑已经写好了，我们只需要打开enable_coverage开关即可）<br>全局后，即便只是编译你的ut模块，但会对所有依赖的source产出gcno和gcda，而且都产出覆盖率<br>编译和gcov处理时间会超过10+分钟（我只是对bdns作为目标产出），如果整体全局，估计会更长<br>这个问题跟gcov本身原理有关，因为它会对代码进行特殊处理，可能是只对一部分代码加编译参数导致整体不一致的情况，ut执行的时候调用了gcov处理过的和没处理过的代码，触发了crash</p>
-</blockquote>
+<ul>
+<li>这样做确实会节省很多时间，主要是在gcov处理方面会很快（只有你加了编译参数的source才会产出.gcno/.gcda文件）</li>
+<li>但是在真正运行时，会导致所有的ut全部crash<br>solution：</li>
+<li>直接把编译参数加到全局（黄龑已经写好了，我们只需要打开enable_coverage开关即可）</li>
+<li>全局后，即便只是编译你的ut模块，但会对所有依赖的source产出gcno和gcda，而且都产出覆盖率</li>
+<li>编译和gcov处理时间会超过10+分钟（我只是对bdns作为目标产出），如果整体全局，估计会更长</li>
+<li>这个问题跟gcov本身原理有关，因为它会对代码进行特殊处理，可能是只对一部分代码加编译参数导致整体不一致的情况，ut执行的时候调用了gcov处理过的和没处理过的代码，触发了crash</li>
+</ul>
 <p>6.修改代码，重新跑覆盖率时，gcno/gcda文件又出错</p>
 <p>solution：</p>
-<blockquote>
-<p>最好gn clean一下，重新跑一遍全过程。<br>或者至少清除产出目录下的 .gcno/.gcda文件。<br>还是lcov的bug，如果连续跑覆盖率，不清除上一次产生的gcno/gcda文件，可能又会产生这些文件无法打开或读取的问题。</p>
-</blockquote>
+<ul>
+<li>最好gn clean一下，重新跑一遍全过程。</li>
+<li>或者至少清除产出目录下的 .gcno/.gcda文件。</li>
+<li>还是lcov的bug，如果连续跑覆盖率，不清除上一次产生的gcno/gcda文件，可能又会产生这些文件无法打开或读取的问题。</li>
+</ul>
 
       
     </div>
