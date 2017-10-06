@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/index.html">
 <meta property="og:site_name" content="Tkooops">
 <meta property="og:description" content="简单介绍一下gcov和lcovgcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。对可执行文件进行一次运行，即可得到.gcda文件最终，用gcov工具对源代码进行处理，得到.gcov文件，即">
-<meta property="og:updated_time" content="2017-10-06T12:33:30.000Z">
+<meta property="og:updated_time" content="2017-10-06T12:39:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在chromium项目中支持gcov单测覆盖率">
 <meta name="twitter:description" content="简单介绍一下gcov和lcovgcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。对可执行文件进行一次运行，即可得到.gcda文件最终，用gcov工具对源代码进行处理，得到.gcov文件，即">
@@ -56,9 +56,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://kkrisen.top"></form>
@@ -91,6 +91,7 @@
       
         <h4 id="简单介绍一下gcov和lcov"><a href="#简单介绍一下gcov和lcov" class="headerlink" title="简单介绍一下gcov和lcov"></a>简单介绍一下gcov和lcov</h4><p>gcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用<br>在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能<br>在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。<br>对可执行文件进行一次运行，即可得到.gcda文件<br>最终，用gcov工具对源代码进行处理，得到.gcov文件，即为我们需要的覆盖信息的初试状态</p>
 <p>因为gcov生成的是纯文字，不好直观展现，lcov工具就是在gcov的基础上，生成html做了界面化展现。</p>
+<p>我们准备在chromium项目(Cronet)中新增gcov单测覆盖率<br>chromium使用的是Google自研的gn &amp; ninja，前者gn是用于生成类似Makefile的编译文件，后者进行真正的编译，产出对象文件<br>关于chromium的编译可以参考官方文档：<a href="https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md" target="_blank" rel="external">https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md</a></p>
 <h4 id="cronet使用lcov本地跑单测覆盖率"><a href="#cronet使用lcov本地跑单测覆盖率" class="headerlink" title="cronet使用lcov本地跑单测覆盖率"></a>cronet使用lcov本地跑单测覆盖率</h4><h6 id="准备材料："><a href="#准备材料：" class="headerlink" title="准备材料："></a>准备材料：</h6><ul>
 <li>lcov 1.10版本</li>
 <li>gcc 4.8.1及以上版本</li>
@@ -144,7 +145,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8fvd5ry00041d9k710fdf32" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8fvd5ry00041d9k710fdf32" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -155,7 +156,7 @@
   
   
     <a href="/20171006/Cronet-httpCache基本逻辑.html/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">Ancien</strong>
       <div class="article-nav-title">Cronet-httpCache基本逻辑</div>
     </a>
   
@@ -188,7 +189,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
@@ -225,7 +226,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 Krisen Tan<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
