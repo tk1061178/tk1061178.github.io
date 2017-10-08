@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Cronet静态库编译解决方案 | Tkooops</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景由于公司产品需求，需要在iOS编译发布中支持静态库包，而我们默认的编译发布是动态库，chromium官方也是只支持动态库。 这个目标实际就是能使用ninja命令配合一定的编译参数就可以编译出静态库+在发布时能将静态产物抛给Agile。这里面预计设计两方面的改动：第一个就是我们的库代码，第二个是编译server。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cronet静态库编译解决方案">
+<meta property="og:url" content="http://kkrisen.top/20171008/Cronet静态库编译解决方案.html/index.html">
+<meta property="og:site_name" content="Tkooops">
+<meta property="og:description" content="背景由于公司产品需求，需要在iOS编译发布中支持静态库包，而我们默认的编译发布是动态库，chromium官方也是只支持动态库。 这个目标实际就是能使用ninja命令配合一定的编译参数就可以编译出静态库+在发布时能将静态产物抛给Agile。这里面预计设计两方面的改动：第一个就是我们的库代码，第二个是编译server。">
+<meta property="og:updated_time" content="2017-10-08T15:03:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cronet静态库编译解决方案">
+<meta name="twitter:description" content="背景由于公司产品需求，需要在iOS编译发布中支持静态库包，而我们默认的编译发布是动态库，chromium官方也是只支持动态库。 这个目标实际就是能使用ninja命令配合一定的编译参数就可以编译出静态库+在发布时能将静态产物抛给Agile。这里面预计设计两方面的改动：第一个就是我们的库代码，第二个是编译server。">
+  
+    <link rel="alternate" href="/atom.xml" title="Tkooops" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Tkooops</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">teakeeper</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://kkrisen.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Cronet静态库编译解决方案" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/20171008/Cronet静态库编译解决方案.html/" class="article-date">
+  <time datetime="2017-10-08T15:02:36.000Z" itemprop="datePublished">2017-10-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Cronet静态库编译解决方案
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>由于公司产品需求，需要在iOS编译发布中支持静态库包，而我们默认的编译发布是动态库，chromium官方也是只支持动态库。</p>
+<p>这个目标实际就是能使用ninja命令配合一定的编译参数就可以编译出静态库+在发布时能将静态产物抛给Agile。这里面预计设计两方面的改动：第一个就是我们的库代码，第二个是编译server。</p>
+<a id="more"></a>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><h5 id="1-调研静态库编译方案"><a href="#1-调研静态库编译方案" class="headerlink" title="1.调研静态库编译方案"></a>1.调研静态库编译方案</h5><p>参考我们各个组件的编译方式（比如component(“net”)最终会编译出libnet.a），发现它们在产出目录中的.ninja文件中都是调用的alink（可参见build/toolchain/mac下tool(“alink”)）,那么研究了一下alink的实现，实际上是调用了python build/toolchain/mac/filter_libtool.py libtool -static xxx TurboNet.rsp，这样的命令来生成静态库的，前提是要存在.rsp(ninja -d keeprsp即可产生，里面记录了该组件中所有的.o文件)，那么大概也能猜出来执行这个命令，就是将.rsp中记录的.o文件全部打包最后生成.a。</p>
+<p>我们实测执行这条命令也是可以顺利产出静态库，所以最早我的想法就是在我们的编译体系中(.gn文件)插入这么个命令，在gn中有action()、exec_script()可以用于执行脚本。不过实验了一会儿，发现实在不太好控制，原因是action、exe_script默认都是在编译最开始就会进行执行，而我的需要其实是要等到该组件所有.o文件+.rsp文件都产出了，再执行脚本，这个时序非常难控制，最后不得已放弃了。由此也可以看出gn这套google搞出来的编译系统，想要个人做一些灵活的改动（比如编译时序的更改）还是比较困难的。</p>
+<p>然后注意到其实我们很多静态库都是使用static_library()这个gn中内置的工具来做的，因此把希望寄托在它身上，尝试了一下还是不行，原因在于static_library中只会把你定义为source的源文件给编译并打包成.a，所有的deps它完全不管，这不符合我们需求，我们想它能像shared_library一样将deps的东西也链接起来。</p>
+<p>找了一些例子发现无论是gn中的componets 还是 static_library，在产出目录的.ninja中都能发现最后都落到了alink上（这种衔接在gn文件中找不到，应该是gn内部做的转换），而且alink后面还确实接了所有需要的.o。而我写的static_library在alink里面就只有source的那几个文件，所以总感觉还是有些猫腻，应该是可以有办法通过static_library使得alink能找到所有的.o的。</p>
+<p>最后折腾了一番，在chromium论坛里找到了答案<a href="https://groups.google.com/a/chromium.org/forum/#!topic/gn-dev/PXidD24WtyE" target="_blank" rel="external">https://groups.google.com/a/chromium.org/forum/#!topic/gn-dev/PXidD24WtyE</a>（这个帖子就是我发的[捂脸表情]）<br>其实我们在static_library中加上complete_static_lib = true，即可编译出完整的静态库（包含所有deps）。</p>
+<p>说到这里，觉得像类似gn这种，也算是一个规模不小的工具了，其中有蛮多技巧，在chromium也由专门的代码区供gn的commit，但确实平时也没精力去深入研究，只能是靠问题驱动。<br>附gn帮助文档：<a href="https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/reference.md" target="_blank" rel="external">https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/reference.md</a>，内容其实蛮多的。<br>解决了关键问题后，为了兼容现有编译以及满足不同编译需求，还做了一些措施，包括</p>
+<ul>
+<li><p>新增ios_release | debug.gn，编译server优先以该文件中的编译参数来进行编译。<br>新增了is_turbonet_static开关，只有为true的时候才会编译出静态库。</p>
+</li>
+<li><p>修改了build/config/ios/rules.gni中的template(“ios_framework_bundle”)，当is_turbonet_static=true，执行static_library,否则执行默认的shared_library.</p>
+</li>
+</ul>
+<h5 id="2-满足同时发布动态库-amp-静态库需求"><a href="#2-满足同时发布动态库-amp-静态库需求" class="headerlink" title="2.满足同时发布动态库 &amp; 静态库需求"></a>2.满足同时发布动态库 &amp; 静态库需求</h5><p>步骤1做完后，当时觉得就可以了，当时的想法是在平时的代码提交及合入，只编正常的动态库，在分支发布时，如果需要静态库，则要需要修改库代码的ios_debug | release.gn再push到icode触发agile编译，才能拿到静态库产出，实际上就是静态库、动态库需要分两次编译，并且对应两个不同的commit。结果这个方案遭到组里较多的challenge。</p>
+<p>后面自己想想确实这样做非常不优雅，对RE来说也是非常难受的一件事，因为每次发布的时候，都需要多提交一次修改、多等待一次编译，最后产出还是分两次从agile上获取，如果我们某个版本由于比如修复bug发布次数多了的话，这个真有点逼死人的感觉。这个方案的唯一好处就是不会对现有的编译体系造成冲击，静态库也只是作为一个commit，各自独立，互不干涉。</p>
+<p>权衡之后，还是决定去做动态库&amp;静态库同时编译发布，这部分就主要是设计ios编译server的修改，包括如下：</p>
+<ul>
+<li><p>1.新增静态库编译脚本compile_static.py，专门用于静态库编译。<br>当然，由于静态库 &amp; 动态库都编译会导致编译时间double（这种就是对现有编译体系造成冲击的最大体现），因此又做了个改进，判断一下当前commit是否在分支上，因为我们是主干开发+分支发布，平时提交评审&amp;合入主干，就不要执行这种对于的编译步骤了，可以节约挺多时间的。<br>另外为什么我没有把静态编译放在现有编译脚本里（对应编译server的compile_task.py），一方面是现在compile_task.py中的步骤已经比较繁琐，而且每个compile_task当初设计就是为了一次编译，如果强行再附加静态编译，并不是很好添加。另外一方面觉得这个东西本身就是一个多余 &amp; 临时的东西（只是因为我们现在需要同时发布两种），不应该长久存在，因此就单独写，不去影响正常流程。</p>
+</li>
+<li><p>2.在库代码中新增baidu/build目录，其中存放一些特殊的gn args文件，比如现在就存放着给手百的静态库args，步骤1中的compile_static.py执行时就会去寻找库代码baidu/build下的args，用它来进行编译。这样做也是避免把编译args写死在编译服务端，为以后可能的编译配置修改打个基础。</p>
+</li>
+<li><p>3.在jenkins平台配置编译步骤，在正常编译完成后，执行该脚本尝试静态库编译。并在最后分不同文件夹兜住所有的静态 &amp; 动态编译产出。<br>由于jenkins平台可以灵活的增删编译步骤、执行脚本等，因此借用它的能力，把动态库 &amp; 静态库的编译 &amp; 打包做出来了，而不是把这坨都交给编译server去做，尽量减轻编译server的负担，由于jenkins平台实际上是一个具有上帝视角的角色，放在这上面，感觉看起来也很舒服。</p>
+</li>
+</ul>
+<p>以下为compile_static.py<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># Author: </span></div><div class="line"><span class="comment"># Created Time: 2017/03/31 19:45</span></div><div class="line"><span class="comment"># File Name: compile_static.py</span></div><div class="line"><span class="comment"># Description:</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="string">Description: it is used for ios static library compilation.</span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="comment"># Copyright (c) 2015 Baidu.com, Inc. All Rights Reserved</span></div><div class="line"><span class="comment">#</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> fcntl</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> signal</div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line"><span class="keyword">import</span> shutil</div><div class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</div><div class="line"></div><div class="line"><span class="keyword">from</span> config <span class="keyword">import</span> GIT_DIR</div><div class="line"><span class="keyword">from</span> config <span class="keyword">import</span> GN_ARGS</div><div class="line"></div><div class="line"></div><div class="line">mbdbox_release = <span class="string">'baidu/build/ios_mbdbox_release.gn'</span></div><div class="line">mbdbox_debug = <span class="string">'baidu/build/ios_mbdbox_debug.gn'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_on_branch</span><span class="params">()</span>:</span></div><div class="line">    <span class="string">"""Summary of function here</span></div><div class="line"><span class="string">    Judge if the commit is in branch</span></div><div class="line"><span class="string">    """</span></div><div class="line">    cmd = <span class="string">'git rev-parse --verify HEAD'</span></div><div class="line">    p = subprocess.Popen(cmd, shell=<span class="keyword">True</span>,</div><div class="line">                         stdout=subprocess.PIPE,</div><div class="line">                         stderr=subprocess.PIPE)</div><div class="line">    p.wait()</div><div class="line">    <span class="keyword">if</span> p.returncode == <span class="number">0</span>:</div><div class="line">        commit_hash = p.stdout.read().strip(<span class="string">'\n'</span>).strip()</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'get local head commit failed'</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line"></div><div class="line">    cmd = <span class="string">'git branch -r --contains %s | grep -v master'</span> % commit_hash</div><div class="line">    p = subprocess.Popen(cmd, shell=<span class="keyword">True</span>,</div><div class="line">                         stdout=subprocess.PIPE,</div><div class="line">                         stderr=subprocess.PIPE)</div><div class="line">    p.wait()</div><div class="line">    <span class="keyword">return</span> p.returncode == <span class="number">0</span> <span class="keyword">and</span> <span class="string">'origin'</span> <span class="keyword">in</span> p.stdout.read().strip(<span class="string">'\n'</span>).strip()</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">non_block_read</span><span class="params">(output)</span>:</span></div><div class="line">    <span class="string">"""Summary of function here</span></div><div class="line"><span class="string">    Read the popen status with non block</span></div><div class="line"><span class="string">    """</span></div><div class="line">    fd = output.fileno()</div><div class="line">    fl = fcntl.fcntl(fd, fcntl.F_GETFL)</div><div class="line">    fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="keyword">return</span> output.read()</div><div class="line">    <span class="keyword">except</span>:</div><div class="line">        <span class="keyword">return</span> <span class="string">''</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_command</span><span class="params">(cmd)</span>:</span></div><div class="line">    <span class="string">"""Summary of function here</span></div><div class="line"><span class="string">    Run command</span></div><div class="line"><span class="string">    """</span></div><div class="line">    cmd_env = os.environ.copy()</div><div class="line">    cmd_env[<span class="string">'LANG'</span>] = <span class="string">'en_US.UTF-8'</span></div><div class="line">    cmd_env[<span class="string">'LC_CTYPE'</span>] = <span class="string">'en_US.UTF-8'</span></div><div class="line">    cmd_env[<span class="string">'LC_ALL'</span>] = <span class="string">'en_US.UTF-8'</span></div><div class="line">    p = subprocess.Popen(cmd, shell=<span class="keyword">True</span>,</div><div class="line">                             preexec_fn=os.setsid,</div><div class="line">                             stdout=subprocess.PIPE,</div><div class="line">                             stderr=subprocess.PIPE,</div><div class="line">                             env=cmd_env)</div><div class="line">    <span class="keyword">while</span> p.poll() <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">        data = non_block_read(p.stdout)</div><div class="line">        data += non_block_read(p.stderr)</div><div class="line">        <span class="keyword">if</span> (data):</div><div class="line">            <span class="keyword">print</span> data</div><div class="line">        sleep(<span class="number">0.5</span>)</div><div class="line"></div><div class="line">    data = non_block_read(p.stdout)</div><div class="line">    data += non_block_read(p.stderr)</div><div class="line">    <span class="keyword">if</span> data:</div><div class="line">        <span class="keyword">print</span> <span class="string">'data: '</span> + data</div><div class="line">    <span class="keyword">return</span> p.returncode</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">Main</span><span class="params">()</span>:</span></div><div class="line">    <span class="string">"""Summary of function here</span></div><div class="line"><span class="string">    Main function</span></div><div class="line"><span class="string">    """</span></div><div class="line">    os.chdir(GIT_DIR)</div><div class="line">    <span class="keyword">if</span> is_on_branch() == <span class="keyword">False</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'It is the commit which not in branch'</span></div><div class="line">        <span class="keyword">return</span></div><div class="line">    <span class="keyword">if</span> os.path.exists(<span class="string">'ios_debug.gn'</span>) == <span class="keyword">False</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'The code is not adapted for static library'</span></div><div class="line">        <span class="keyword">return</span></div><div class="line"></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        shutil.copy(mbdbox_release, <span class="string">'out/Cronet/'</span> + GN_ARGS)</div><div class="line">        shutil.copy(mbdbox_debug, <span class="string">'out/Cronet/Debug/'</span> + GN_ARGS)</div><div class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">        <span class="keyword">print</span> <span class="string">'Error in copy static build config: '</span> + str(e)</div><div class="line">        sys.exit(<span class="number">-1</span>)</div><div class="line"></div><div class="line">    ret_codes = []</div><div class="line">    cmds = [</div><div class="line">            <span class="string">'gn gen out/Cronet'</span>,</div><div class="line">            <span class="string">'gn gen out/Cronet/Debug'</span>,</div><div class="line">            <span class="string">'ninja -d keeprsp -C out/Cronet -j 16 cronet_package'</span>,</div><div class="line">            <span class="string">'ninja -d keeprsp -C out/Cronet/Debug -j 16 cronet_package'</span>,</div><div class="line">        ]</div><div class="line"></div><div class="line">    <span class="keyword">for</span> cmd <span class="keyword">in</span> cmds:</div><div class="line">        ret_codes.append(run_command(cmd))</div><div class="line"></div><div class="line">    <span class="keyword">for</span> ret <span class="keyword">in</span> ret_codes:</div><div class="line">        <span class="keyword">if</span> ret != <span class="number">0</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">'some error happened'</span></div><div class="line">            sys.exit(<span class="number">-1</span>)</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    Main()%</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/20171008/Cronet静态库编译解决方案.html/" data-id="cj8ivp8080004mn9k3wbilvdg" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/20171008/Cronet双端持续集成发布实践.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Cronet双端持续集成发布实践</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/20171008/Cronet静态库编译解决方案.html/">Cronet静态库编译解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/20171008/Cronet双端持续集成发布实践.html/">Cronet双端持续集成发布实践</a>
+          </li>
+        
+          <li>
+            <a href="/20171006/使用python-unidiff库分析git-diff.html/">使用python unidiff库分析git diff</a>
+          </li>
+        
+          <li>
+            <a href="/20171006/在chromium项目中支持gcov单测覆盖率.html/">在chromium项目中支持gcov单测覆盖率</a>
+          </li>
+        
+          <li>
+            <a href="/20171006/Cronet-httpCache基本逻辑.html/">Cronet-httpCache基本逻辑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Krisen Tan<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
