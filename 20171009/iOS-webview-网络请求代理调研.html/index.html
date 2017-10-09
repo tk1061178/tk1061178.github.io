@@ -14,7 +14,7 @@
 <meta property="og:image" content="http://kkrisen.top/20171009/iOS-webview-网络请求代理调研.html/wkwebview-codes.png">
 <meta property="og:image" content="http://kkrisen.top/20171009/iOS-webview-网络请求代理调研.html/wkwebview-demo.png">
 <meta property="og:image" content="http://kkrisen.top/20171009/iOS-webview-网络请求代理调研.html/wkwebview-danger.png">
-<meta property="og:updated_time" content="2017-10-09T03:13:29.000Z">
+<meta property="og:updated_time" content="2017-10-09T03:17:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS webview 网络请求代理调研">
 <meta name="twitter:description" content="背景在iOS中，除了普通请求（NSURLSession、NSURLConnection）以外，还有一种webview的请求，这是iOS的一种UI组件，可直接调用其loadRequest方法，发起请求，webview会把response以html的形式加载到其界面上。 我们主要对于常用的UIWebview、WKWebview的网络请求尝试使用Cronet进行代理进行了调研分析。">
@@ -60,9 +60,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://kkrisen.top"></form>
@@ -104,12 +104,14 @@
 <p>问题2：<br>无法被NSURLProtocol拦截，这意味着无法代理它的请求。<br>使用WKWebview，期待命中CroNet时，却发现它仅仅命中了CanInitRequest函数，然后就出来了，继续走的系统网络库</p>
 <p>详见帖子：<br><a href="https://blog.yeatse.com/2016/10/26/support-nsurlprotocol-in-wkwebview/" target="_blank" rel="external">WKWebview-NSURLProtocol</a><br>自测确实是这样。</p>
 <p>解决方法：<br>需要拿到WKBrowsingContextController，通过register方法，让http/https的请求进入NSURLProtocol。<br><img src="/20171009/iOS-webview-网络请求代理调研.html/wkwebview-codes.png" alt="wkwebview-codes"><br>自测这样的话，可以命中CroNet<br>如图为让WKWebview命中CroNet后加载出来的页面<br><img src="/20171009/iOS-webview-网络请求代理调研.html/wkwebview-demo.png" alt="wkwebview-demo"></p>
-<p><font color="red" size="72">风险：这个好像使用了苹果未公开的API</font><br><img src="/20171009/iOS-webview-网络请求代理调研.html/wkwebview-danger.png" alt="wkwebview-danger"></p>
+<font color="red" size="20">风险：这个好像使用了苹果未公开的API</font>
+
+<p><img src="/20171009/iOS-webview-网络请求代理调研.html/wkwebview-danger.png" alt="wkwebview-danger"></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/iOS-webview-网络请求代理调研.html/" data-id="cj8jls2je0004b79kyg3znfbu" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/iOS-webview-网络请求代理调研.html/" data-id="cj8jls2je0004b79kyg3znfbu" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -120,7 +122,7 @@
   
   
     <a href="/20171009/iOS版本导致NSURLSession表现不一致问题调研.html/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">Ancien</strong>
       <div class="article-nav-title">iOS版本导致NSURLSession表现不一致问题调研</div>
     </a>
   
@@ -153,7 +155,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
@@ -190,7 +192,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 Krisen Tan<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
