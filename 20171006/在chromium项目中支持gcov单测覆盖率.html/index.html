@@ -100,7 +100,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//build/config/BUILDCONFIG.gn</span></div><div class="line">  <span class="keyword">if</span> (is_linux &amp;&amp; enable_coverage) &#123;</div><div class="line">	_native_compiler_configs += [ <span class="string">"//build/config:gcov"</span> ]</div><div class="line">	use_sysroot = <span class="literal">false</span></div><div class="line">	assert(!use_sysroot, <span class="string">"sysroot images require clang, so disable it."</span>)</div><div class="line">	assert(is_debug, <span class="string">"Target should be compiled in debug mode."</span>)</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//build/config/BUILD.gn</span></div><div class="line">  config(<span class="string">"gcov"</span>) &#123;</div><div class="line">	cflags = [ <span class="string">"-fprofile-arcs"</span>, <span class="string">"-ftest-coverage"</span> ]</div><div class="line">	libs = [ <span class="string">"gcov"</span> ]</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
 <p>enable_coverage即为全局gcov开关<br>编译的时候，<br>gn args out/default<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">use_sysroot = <span class="literal">false</span></div><div class="line">is_debug = <span class="literal">true</span>  <span class="comment">//打开debug开关</span></div><div class="line">is_clang = <span class="literal">false</span>  <span class="comment">//不适应clang，即用gcc</span></div><div class="line">symbol_level = <span class="number">0</span></div><div class="line">enable_coverage = <span class="literal">true</span>  <span class="comment">//打开gcov开关</span></div></pre></td></tr></table></figure></p>
-<p>执行gcov.sh，本地化lcov工具脚本<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash">/bin/bash</span></div><div class="line">test_model="bdns_unittests"  #需要编译的模块名</div><div class="line">out_dir="./"  #编译输出目录</div><div class="line">COVERAGE_DIR="./out_html"  #lcov输出文件夹</div><div class="line">ninja -C $out_dir -j 11 $test_model  #使用ninja进行编译</div><div class="line">lcov -b ./ -c -i -d ./ -o coverage.init  #使用lcov先跑一遍初始数据（处理gcno，信息输出到coverage.init）</div><div class="line"><span class="meta">$</span><span class="bash">out_dir<span class="variable">$test_model</span> --<span class="built_in">test</span>-launcher-jobs=11 --<span class="built_in">test</span>-launcher-retry-limit=0  <span class="comment">#运行可执行文件</span></span></div><div class="line">lcov  -b ./ -c -d ./ -o coverage.run  #再跑一遍lcov（处理gcda，信息输出到coverage.run）</div><div class="line">lcov -a coverage.init -a coverage.run -o coverage.total  #两个文件合并成coverage.total</div><div class="line">genhtml coverage.total --output-directory $COVERAGE_DIR --title "TurboNet Test Coverage" --show-details   </div><div class="line">--legend  #产出html</div></pre></td></tr></table></figure></p>
+<p>执行gcov.sh，本地化lcov工具脚本<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span>/bin/bash</div><div class="line">test_model="bdns_unittests"  #需要编译的模块名</div><div class="line">out_dir="./"  #编译输出目录</div><div class="line">COVERAGE_DIR="./out_html"  #lcov输出文件夹</div><div class="line">ninja -C $out_dir -j 11 $test_model  #使用ninja进行编译</div><div class="line">lcov -b ./ -c -i -d ./ -o coverage.init  #使用lcov先跑一遍初始数据（处理gcno，信息输出到coverage.init）</div><div class="line"><span class="meta">$</span>out_dir$test_model --test-launcher-jobs=11 --test-launcher-retry-limit=0  #运行可执行文件</div><div class="line">lcov  -b ./ -c -d ./ -o coverage.run  #再跑一遍lcov（处理gcda，信息输出到coverage.run）</div><div class="line">lcov -a coverage.init -a coverage.run -o coverage.total  #两个文件合并成coverage.total</div><div class="line">genhtml coverage.total --output-directory $COVERAGE_DIR --title "TurboNet Test Coverage" --show-details   </div><div class="line">--legend  #产出html</div></pre></td></tr></table></figure></p>
 <p>最终，在out_html下就有我们需要的产出，以html形式。</p>
 <h4 id="踩坑点"><a href="#踩坑点" class="headerlink" title="踩坑点"></a>踩坑点</h4><p>1.pkg-config could not run</p>
 <ul>
@@ -145,7 +145,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8jkxm9s000a4h9kvez4nui9" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8jls2jq0009b79kpav6srcp" class="article-share-link">Share</a>
       
       
     </footer>
@@ -203,6 +203,10 @@
       <ul>
         
           <li>
+            <a href="/20171009/iOS-webview-网络请求代理调研.html/">iOS webview 网络请求代理调研</a>
+          </li>
+        
+          <li>
             <a href="/20171009/iOS版本导致NSURLSession表现不一致问题调研.html/">iOS版本导致NSURLSession表现不一致问题调研</a>
           </li>
         
@@ -216,10 +220,6 @@
         
           <li>
             <a href="/20171008/Cronet静态库编译解决方案.html/">Cronet静态库编译解决方案</a>
-          </li>
-        
-          <li>
-            <a href="/20171008/Cronet双端持续集成发布实践.html/">Cronet双端持续集成发布实践</a>
           </li>
         
       </ul>

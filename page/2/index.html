@@ -68,6 +68,58 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Cronet代码解析-URLRequest" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/20171005/Cronet代码解析-URLRequest.html/" class="article-date">
+  <time datetime="2017-10-05T09:46:05.000Z" itemprop="datePublished">2017-10-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/20171005/Cronet代码解析-URLRequest.html/">Cronet代码解析-URLRequest</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>Cronet是chromium的网络协议栈，具有如下特点。</p>
+<ul>
+<li><p>提供了从传输层到应用层的完整网络库功能。</p>
+</li>
+<li><p>极佳的跨平台性，覆盖所有主流操作系统：iOS, Android, linux, macOS, win。</p>
+</li>
+<li><p>除了应用层由于支持跨平台，使用了不同语言封装（java | objective-C），底层共用一套C++代码，性能很高。</p>
+</li>
+<li><p>提供多种协议支持:http/spdy/quic等。</p>
+</li>
+</ul>
+<p>最重要的是，这个项目Google开源出来了。<br>其中，http协议常用的请求方式为使用URLRequest，本章用于记录对URLRequest代码的学习分析。<br></p>
+        
+          <p class="article-more-link">
+            <a href="/20171005/Cronet代码解析-URLRequest.html/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/20171005/Cronet代码解析-URLRequest.html/" data-id="cj8jls2j20002b79k0ea0fy0p" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-twemproxy部署效率的优化实践" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/20170924/twemproxy部署效率的优化实践.html/" class="article-date">
@@ -102,7 +154,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8jkxm9g00064h9k5sco65va" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8jls2js000ab79k2bvylcw7" class="article-share-link">Share</a>
       
       
     </footer>
@@ -144,7 +196,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/Redis-sync.html/" data-id="cj8jkxm9x000c4h9kq3n7bz8z" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20170924/Redis-sync.html/" data-id="cj8jls2jo0008b79kyow31svu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -181,7 +233,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170919/hello-world.html/" data-id="cj8jkxm9900044h9kmos16xsf" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20170919/hello-world.html/" data-id="cj8jls2jl0007b79kmehaxw3i" class="article-share-link">Share</a>
       
       
     </footer>
@@ -225,6 +277,10 @@
       <ul>
         
           <li>
+            <a href="/20171009/iOS-webview-网络请求代理调研.html/">iOS webview 网络请求代理调研</a>
+          </li>
+        
+          <li>
             <a href="/20171009/iOS版本导致NSURLSession表现不一致问题调研.html/">iOS版本导致NSURLSession表现不一致问题调研</a>
           </li>
         
@@ -238,10 +294,6 @@
         
           <li>
             <a href="/20171008/Cronet静态库编译解决方案.html/">Cronet静态库编译解决方案</a>
-          </li>
-        
-          <li>
-            <a href="/20171008/Cronet双端持续集成发布实践.html/">Cronet双端持续集成发布实践</a>
           </li>
         
       </ul>
