@@ -68,6 +68,58 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-项目版本号自动化实践" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/20171009/项目版本号自动化实践.html/" class="article-date">
+  <time datetime="2017-10-09T00:49:44.000Z" itemprop="datePublished">2017-10-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/20171009/项目版本号自动化实践.html/">项目版本号半自动化实践</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>项目组基于Cronet自研的产品每次对外发布对应一个版本号，在此之前版本号都是手动由Release Engineer进行填写，并在代码中用到了版本号的地方进行相应修改。</p>
+<p><strong>现状</strong><br>版本号分为4位，前两位对应一次发布，第三位为patch（从1开始），第四位没有作用，默认为1。例如1.5.2.1，即表示我们2016.12月份发布的1.5版本，其中进行了一次patch,因此第三位为2。</p>
+<p>版本号由Release Engineer在组内确认完后，由于目前部分模块均在代码中写死了版本号，需要去手动调整后再commit一次，才能发布。</p>
+<p>总之，这块存在两个问题。</p>
+<ol>
+<li>我们对四位版本号的使用不合理，实际上只用到了其中三位。</li>
+<li>每次发布时，为了版本号需要人工去调整代码，这显然是很难忍受的。</li>
+</ol>
+<p><strong>目标</strong><br>为了提高效率，我们将现状和需求分析了下，分为两个具体要做的事:</p>
+<ul>
+<li>提供统一的版本号配置管理，只需修改版本号配置，便可应用到整个代码库。</li>
+<li>尽量将版本号做成自动化无需人工干预的。</li></ul>
+        
+          <p class="article-more-link">
+            <a href="/20171009/项目版本号自动化实践.html/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/20171009/项目版本号自动化实践.html/" data-id="cj8ji2feq000agu9kabe7dbz4" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Cronet静态库编译解决方案" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/20171008/Cronet静态库编译解决方案.html/" class="article-date">
@@ -100,7 +152,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171008/Cronet静态库编译解决方案.html/" data-id="cj8ivp8080004mn9k3wbilvdg" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171008/Cronet静态库编译解决方案.html/" data-id="cj8ji2fed0004gu9ktcdd2wnf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -144,7 +196,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171008/Cronet双端持续集成发布实践.html/" data-id="cj8ivp8050003mn9kmwj9ulma" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171008/Cronet双端持续集成发布实践.html/" data-id="cj8ji2feb0003gu9kxofjk1dm" class="article-share-link">Share</a>
       
       
     </footer>
@@ -186,7 +238,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/使用python-unidiff库分析git-diff.html/" data-id="cj8ivp80f0008mn9k8gd3mt2a" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/使用python-unidiff库分析git-diff.html/" data-id="cj8ji2fek0007gu9kjtnsgsku" class="article-share-link">Share</a>
       
       
     </footer>
@@ -229,7 +281,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8ivp80i0009mn9kzesrz7il" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8ji2fem0009gu9kkz65oh1v" class="article-share-link">Share</a>
       
       
     </footer>
@@ -270,7 +322,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/" data-id="cj8ivp7zx0002mn9k92duz9hg" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/" data-id="cj8ji2fe20001gu9klxe6odlz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -311,7 +363,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/Cronet-http-header相关逻辑梳理.html/" data-id="cj8ivp7zr0001mn9kts3plvwg" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/Cronet-http-header相关逻辑梳理.html/" data-id="cj8ji2fdx0000gu9kfcodiphc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -363,7 +415,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171005/Cronet代码解析-URLRequest.html/" data-id="cj8ivp7zl0000mn9kclm1ri1p" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171005/Cronet代码解析-URLRequest.html/" data-id="cj8ji2fe50002gu9k3cjl2mbx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -407,7 +459,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8ivp80d0007mn9kpaptsu16" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8ji2fel0008gu9ka6gxvh4x" class="article-share-link">Share</a>
       
       
     </footer>
@@ -449,44 +501,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/Redis-sync.html/" data-id="cj8ivp80c0006mn9k9m2gfx4e" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/20170919/hello-world.html/" class="article-date">
-  <time datetime="2017-09-19T15:40:22.000Z" itemprop="datePublished">2017-09-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/20170919/hello-world.html/">Maybe another beginning</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近发生了很多，想了也很多。也早该开始做一些事情去积累和沉淀。希望这是一个新的开始。<br>Hope, confidence and passion.<br>Tkooops.</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170919/hello-world.html/" data-id="cj8ivp80a0005mn9kz3f0vitq" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20170924/Redis-sync.html/" data-id="cj8ji2fej0006gu9k7x4v5qsg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -497,6 +512,10 @@
 
   
 
+
+  <nav id="page-nav">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">__('next') &raquo;</a>
+  </nav>
 </section>
         
           <aside id="sidebar">
@@ -526,6 +545,10 @@
       <ul>
         
           <li>
+            <a href="/20171009/项目版本号自动化实践.html/">项目版本号半自动化实践</a>
+          </li>
+        
+          <li>
             <a href="/20171008/Cronet静态库编译解决方案.html/">Cronet静态库编译解决方案</a>
           </li>
         
@@ -539,10 +562,6 @@
         
           <li>
             <a href="/20171006/在chromium项目中支持gcov单测覆盖率.html/">在chromium项目中支持gcov单测覆盖率</a>
-          </li>
-        
-          <li>
-            <a href="/20171006/Cronet-httpCache基本逻辑.html/">Cronet-httpCache基本逻辑</a>
           </li>
         
       </ul>
