@@ -68,6 +68,50 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-C-静态库符号冲突解决方案" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/20171009/C-静态库符号冲突解决方案.html/" class="article-date">
+  <time datetime="2017-10-09T03:38:09.000Z" itemprop="datePublished">2017-10-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/20171009/C-静态库符号冲突解决方案.html/">C++静态库符号冲突解决方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>Cronet准备接入公司一个产品的iOS版本，由于需要兼容iOS7.0，所有sdk需提供静态库版本。</p>
+<p>静态库包含了整个代码里所有全局可见的函数、变量，这些在编译后都是以符号的方式存在于xxx.a中，由于跟手百工程共用了一些相同的第三方库，造成在链接过程报duplicated symbols error错误。</p>
+<p>而更为严重的一点是，在iOS的xcode进行链接时，它会自己替你解决一些符合冲突，解决的方式是按链接顺序，假设libA先链接，那么这些冲突符号就是按libA的定义来运行。</p>
+<p>在我们集成过程中，问题最大的是已有的openssl 与我们的 boringssl库的冲突，由于boringssl做了许多定制化的修改，我们目前只能想办法让两个库共存，并且运行互不干扰。<br></p>
+        
+          <p class="article-more-link">
+            <a href="/20171009/C-静态库符号冲突解决方案.html/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/20171009/C-静态库符号冲突解决方案.html/" data-id="cj8jn21w40000pw9k0pfx02gi" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-项目开源解决方案" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/20171009/项目开源解决方案.html/" class="article-date">
@@ -102,7 +146,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/项目开源解决方案.html/" data-id="cj8jmfjmo000dkc9kedtwqq4h" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/项目开源解决方案.html/" data-id="cj8jn21xe000epw9kftl409jp" class="article-share-link">Share</a>
       
       
     </footer>
@@ -144,7 +188,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/iOS-webview-网络请求代理调研.html/" data-id="cj8jmfjm90007kc9k3mm7c4zy" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/iOS-webview-网络请求代理调研.html/" data-id="cj8jn21x10008pw9kw37vkx8b" class="article-share-link">Share</a>
       
       
     </footer>
@@ -185,7 +229,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/iOS版本导致NSURLSession表现不一致问题调研.html/" data-id="cj8jmfjma0008kc9ksxfijw5l" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/iOS版本导致NSURLSession表现不一致问题调研.html/" data-id="cj8jn21x40009pw9kvh1wkox8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -231,7 +275,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/使用mqtt协议实现iOS端心跳探活.html/" data-id="cj8jmfjmh000akc9k3ygvybh6" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/使用mqtt协议实现iOS端心跳探活.html/" data-id="cj8jn21x7000bpw9k50sfrezc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -283,7 +327,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/项目版本号自动化实践.html/" data-id="cj8jmfjmr000ekc9k770mgucn" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/项目版本号自动化实践.html/" data-id="cj8jn21xg000fpw9kopzp6dik" class="article-share-link">Share</a>
       
       
     </footer>
@@ -325,7 +369,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171008/Cronet静态库编译解决方案.html/" data-id="cj8jmfjm10004kc9k8u8z18ze" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171008/Cronet静态库编译解决方案.html/" data-id="cj8jn21wu0005pw9k7rca0csj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -369,7 +413,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171008/Cronet双端持续集成发布实践.html/" data-id="cj8jmfjlz0003kc9kcp95rex4" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171008/Cronet双端持续集成发布实践.html/" data-id="cj8jn21wp0004pw9kmecxr3er" class="article-share-link">Share</a>
       
       
     </footer>
@@ -411,7 +455,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/使用python-unidiff库分析git-diff.html/" data-id="cj8jmfjmj000bkc9ku51xv9xx" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/使用python-unidiff库分析git-diff.html/" data-id="cj8jn21x9000cpw9k1lfatf0c" class="article-share-link">Share</a>
       
       
     </footer>
@@ -454,48 +498,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8jmfjml000ckc9k72zq2ky8" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Cronet-httpCache基本逻辑" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/20171006/Cronet-httpCache基本逻辑.html/" class="article-date">
-  <time datetime="2017-10-06T08:53:05.000Z" itemprop="datePublished">2017-10-06</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/20171006/Cronet-httpCache基本逻辑.html/">Cronet-httpCache基本逻辑</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>对Cronet中如何做http cache做了一个梳理解析.<br>先介绍一下Cronet网络库的启动流程<br><img src="cronet-httpcache.jpg" alt="Cronet-httpcache"><br>以Android举例，如上图，Cronet是一个单线程网络库，在java层存在唯一的CronetEngine，在C++层存在唯一的URLRequestContext，它们是网络库最核心的上下文。<br></p>
-        
-          <p class="article-more-link">
-            <a href="/20171006/Cronet-httpCache基本逻辑.html/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/" data-id="cj8jmfjll0001kc9k83zth1h9" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8jn21xc000dpw9k2ersp6nj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -539,6 +542,10 @@
       <ul>
         
           <li>
+            <a href="/20171009/C-静态库符号冲突解决方案.html/">C++静态库符号冲突解决方案</a>
+          </li>
+        
+          <li>
             <a href="/20171009/项目开源解决方案.html/">项目开源解决方案</a>
           </li>
         
@@ -552,10 +559,6 @@
         
           <li>
             <a href="/20171009/使用mqtt协议实现iOS端心跳探活.html/">使用mqtt协议实现iOS端心跳探活</a>
-          </li>
-        
-          <li>
-            <a href="/20171009/项目版本号自动化实践.html/">项目版本号自动化实践</a>
           </li>
         
       </ul>
