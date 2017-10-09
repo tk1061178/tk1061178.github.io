@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>项目版本号半自动化实践 | Tkooops</title>
+  <title>项目版本号自动化实践 | Tkooops</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="背景项目组基于Cronet自研的产品每次对外发布对应一个版本号，在此之前版本号都是手动由Release Engineer进行填写，并在代码中用到了版本号的地方进行相应修改。 现状版本号分为4位，前两位对应一次发布，第三位为patch（从1开始），第四位没有作用，默认为1。例如1.5.2.1，即表示我们2016.12月份发布的1.5版本，其中进行了一次patch,因此第三位为2。 版本号由Relea">
 <meta property="og:type" content="article">
-<meta property="og:title" content="项目版本号半自动化实践">
+<meta property="og:title" content="项目版本号自动化实践">
 <meta property="og:url" content="http://kkrisen.top/20171009/项目版本号自动化实践.html/index.html">
 <meta property="og:site_name" content="Tkooops">
 <meta property="og:description" content="背景项目组基于Cronet自研的产品每次对外发布对应一个版本号，在此之前版本号都是手动由Release Engineer进行填写，并在代码中用到了版本号的地方进行相应修改。 现状版本号分为4位，前两位对应一次发布，第三位为patch（从1开始），第四位没有作用，默认为1。例如1.5.2.1，即表示我们2016.12月份发布的1.5版本，其中进行了一次patch,因此第三位为2。 版本号由Relea">
 <meta property="og:image" content="http://kkrisen.top/20171009/项目版本号自动化实践.html/version_header.png">
-<meta property="og:updated_time" content="2017-10-09T01:29:33.000Z">
+<meta property="og:updated_time" content="2017-10-09T01:32:47.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="项目版本号半自动化实践">
+<meta name="twitter:title" content="项目版本号自动化实践">
 <meta name="twitter:description" content="背景项目组基于Cronet自研的产品每次对外发布对应一个版本号，在此之前版本号都是手动由Release Engineer进行填写，并在代码中用到了版本号的地方进行相应修改。 现状版本号分为4位，前两位对应一次发布，第三位为patch（从1开始），第四位没有作用，默认为1。例如1.5.2.1，即表示我们2016.12月份发布的1.5版本，其中进行了一次patch,因此第三位为2。 版本号由Relea">
 <meta name="twitter:image" content="http://kkrisen.top/20171009/项目版本号自动化实践.html/version_header.png">
   
@@ -83,7 +83,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      项目版本号半自动化实践
+      项目版本号自动化实践
     </h1>
   
 
@@ -103,8 +103,9 @@
 <ul>
 <li>提供统一的版本号配置管理，只需修改版本号配置，便可应用到整个代码库。</li>
 <li>尽量将版本号做成自动化无需人工干预的。<a id="more"></a>
-<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><strong>1.明确四位版本号的每一位用途</strong><br>可参考chromium对于四位版本号的解释<br><a href="https://www.chromium.org/developers/version-numbers" target="_blank" rel="external">https://www.chromium.org/developers/version-numbers</a><br>概括来说：<br>四位版本号由 MAJOR.MINOR.BUILD.PATCH组成<br>MAJOR and Minor: 每次版本发布时update，这个跟我们现在是一样的。<br>BUILD：在trunk上（应该可以理解为代码库里主干和所有分支）有构建的时候，永久性自增1<br>PATCH：在构建分支上进行编译，则自增1</li>
+</li>
 </ul>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p><strong>1.明确四位版本号的每一位用途</strong><br>可参考chromium对于四位版本号的解释<br><a href="https://www.chromium.org/developers/version-numbers" target="_blank" rel="external">https://www.chromium.org/developers/version-numbers</a><br>概括来说：<br>四位版本号由 MAJOR.MINOR.BUILD.PATCH组成<br>MAJOR and Minor: 每次版本发布时update，这个跟我们现在是一样的。<br>BUILD：在trunk上（应该可以理解为代码库里主干和所有分支）有构建的时候，永久性自增1<br>PATCH：在构建分支上进行编译，则自增1</p>
 <p>参考chromium做法，再结合我们自身需求。我们可以有如下规则：<br>版本号前两位MAJOR.MINOR对应一次发布，无需变化。<br>使用第三位作为BUILD，任何一次在agile上触发的编译均会将BUILD永久性+1，初始值为1024（看了一下我们已有的编译已经超过了1000次）。<br>使用第四位作为PATCH，每个MAJOR.MINOR都有自己的PATCH，初始值为1，任何一次该版本的agile编译，将PATCH+1。</p>
 <p><strong>2.版本号统一配置管理，与具体代码解耦</strong><br>我们参考了chromium原生的版本号宏的生成方案，通过读取一个配置文件中的版本号，在编译时生成一个包含#define CRONET_VERSION 1.6.x.x类似这种宏的头文件，所有需要用到版本号的代码只需获取该宏即可。<br>具体可参考代码库中：baidu/version.gni<br>这样做完后，RE无需去手动修改代码，而只要调整配置文件，即可全局生效。</p>
 <p><strong>3.自动化版本号</strong><br>在第一步问题解决后，还是不太能说服大家这个有多好用，我们发现版本号的BUILD &amp; PATCH都跟编译次数相关，如果能将其做成自动化的，就更好了。</p>
@@ -172,7 +173,7 @@
       <ul>
         
           <li>
-            <a href="/20171009/项目版本号自动化实践.html/">项目版本号半自动化实践</a>
+            <a href="/20171009/项目版本号自动化实践.html/">项目版本号自动化实践</a>
           </li>
         
           <li>
