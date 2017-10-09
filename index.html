@@ -68,6 +68,52 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-使用mqtt协议实现iOS端心跳探活" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/20171009/使用mqtt协议实现iOS端心跳探活.html/" class="article-date">
+  <time datetime="2017-10-09T01:46:47.000Z" itemprop="datePublished">2017-10-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/20171009/使用mqtt协议实现iOS端心跳探活.html/">使用mqtt协议实现iOS端心跳探活</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。</p>
+<p>我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。</p>
+<h3 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h3><p>移动端监测与服务器监测最大的不同，应该在于移动端设备所处的网络环境是复杂多变的，而我们的心跳探活目的是确认端设备本身是否正常。</p>
+<p>因此在选择端设备与服务端的通信协议时，要求对网络依赖小且在比如弱网环境下依然稳定工作，这样才能避免网络环境不稳定造成的干扰，避免一些误判。</p>
+<p>Mqtt (Message Queue Telemetry Transport)协议是一种应用层协议，适用于资源受限例如低带宽、高延迟网络环境下的端到端通信。这种适用性主要是来自于它在包大小的精简以及对push消息场景的一些优化。</p>
+<p>因此最终选用的mqtt协议作为心跳探活的通信协议，mqtt的对比介绍还可参见：<a href="https://blogs.vmware.com/vfabric/2013/02/choosing-your-messaging-protocol-amqp-mqtt-or-stomp.html" target="_blank" rel="external">Choosing Your Messaging Protocol: AMQP, MQTT, or STOMP</a></p>
+        
+          <p class="article-more-link">
+            <a href="/20171009/使用mqtt协议实现iOS端心跳探活.html/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/20171009/使用mqtt协议实现iOS端心跳探活.html/" data-id="cj8jj5u810008qe9kfuey07rj" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-项目版本号自动化实践" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/20171009/项目版本号自动化实践.html/" class="article-date">
@@ -110,7 +156,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/项目版本号自动化实践.html/" data-id="cj8ji2feq000agu9kabe7dbz4" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/项目版本号自动化实践.html/" data-id="cj8jj5u87000bqe9k068kkzd9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -152,7 +198,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171008/Cronet静态库编译解决方案.html/" data-id="cj8ji2fed0004gu9ktcdd2wnf" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171008/Cronet静态库编译解决方案.html/" data-id="cj8jj5u7p0004qe9kl6qn0teu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -196,7 +242,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171008/Cronet双端持续集成发布实践.html/" data-id="cj8ji2feb0003gu9kxofjk1dm" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171008/Cronet双端持续集成发布实践.html/" data-id="cj8jj5u7f0002qe9k421u2die" class="article-share-link">Share</a>
       
       
     </footer>
@@ -238,7 +284,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/使用python-unidiff库分析git-diff.html/" data-id="cj8ji2fek0007gu9kjtnsgsku" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/使用python-unidiff库分析git-diff.html/" data-id="cj8jj5u830009qe9k0xx33b3t" class="article-share-link">Share</a>
       
       
     </footer>
@@ -281,7 +327,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8ji2fem0009gu9kkz65oh1v" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8jj5u85000aqe9klp6z3hey" class="article-share-link">Share</a>
       
       
     </footer>
@@ -322,7 +368,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/" data-id="cj8ji2fe20001gu9klxe6odlz" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/" data-id="cj8jj5u7b0001qe9kbhb2o9iz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -363,7 +409,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/Cronet-http-header相关逻辑梳理.html/" data-id="cj8ji2fdx0000gu9kfcodiphc" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/Cronet-http-header相关逻辑梳理.html/" data-id="cj8jj5u760000qe9k69112isd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -415,7 +461,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171005/Cronet代码解析-URLRequest.html/" data-id="cj8ji2fe50002gu9k3cjl2mbx" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171005/Cronet代码解析-URLRequest.html/" data-id="cj8jj5u7n0003qe9kymj7wag2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -459,49 +505,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8ji2fel0008gu9ka6gxvh4x" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Redis-sync" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/20170924/Redis-sync.html/" class="article-date">
-  <time datetime="2017-09-24T03:06:58.000Z" itemprop="datePublished">2017-09-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/20170924/Redis-sync.html/">Redis-sync</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>Redis是一个内存型KV存储，以其高性能特性得到广泛应用。作为数据库，主从同步一直是一个非常核心的功能。其主从同步是基于最终一致性。</p>
-<p>本章主要是主从同步相关流程和代码的分析，内容写于2015年基于Redis 2.6版本。<br></p>
-        
-          <p class="article-more-link">
-            <a href="/20170924/Redis-sync.html/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/Redis-sync.html/" data-id="cj8ji2fej0006gu9k7x4v5qsg" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8jj5u7z0007qe9k38fkhcgw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -545,6 +549,10 @@
       <ul>
         
           <li>
+            <a href="/20171009/使用mqtt协议实现iOS端心跳探活.html/">使用mqtt协议实现iOS端心跳探活</a>
+          </li>
+        
+          <li>
             <a href="/20171009/项目版本号自动化实践.html/">项目版本号自动化实践</a>
           </li>
         
@@ -558,10 +566,6 @@
         
           <li>
             <a href="/20171006/使用python-unidiff库分析git-diff.html/">使用python unidiff库分析git diff</a>
-          </li>
-        
-          <li>
-            <a href="/20171006/在chromium项目中支持gcov单测覆盖率.html/">在chromium项目中支持gcov单测覆盖率</a>
           </li>
         
       </ul>

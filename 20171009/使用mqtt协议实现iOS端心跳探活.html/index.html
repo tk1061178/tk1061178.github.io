@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用mqtt协议实现iOS端心跳探活 | Tkooops</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。 我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。 技术选型移动端监测与服务器监测最大的不同，应该在于移动端设备所处的网络环境是复杂多变的，而我们的心跳探活目的是确认端设备本身是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用mqtt协议实现iOS端心跳探活">
+<meta property="og:url" content="http://kkrisen.top/20171009/使用mqtt协议实现iOS端心跳探活.html/index.html">
+<meta property="og:site_name" content="Tkooops">
+<meta property="og:description" content="背景这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。 我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。 技术选型移动端监测与服务器监测最大的不同，应该在于移动端设备所处的网络环境是复杂多变的，而我们的心跳探活目的是确认端设备本身是">
+<meta property="og:updated_time" content="2017-10-09T02:00:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用mqtt协议实现iOS端心跳探活">
+<meta name="twitter:description" content="背景这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。 我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。 技术选型移动端监测与服务器监测最大的不同，应该在于移动端设备所处的网络环境是复杂多变的，而我们的心跳探活目的是确认端设备本身是">
+  
+    <link rel="alternate" href="/atom.xml" title="Tkooops" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Tkooops</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">teakeeper</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://kkrisen.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-使用mqtt协议实现iOS端心跳探活" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/20171009/使用mqtt协议实现iOS端心跳探活.html/" class="article-date">
+  <time datetime="2017-10-09T01:46:47.000Z" itemprop="datePublished">2017-10-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用mqtt协议实现iOS端心跳探活
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。</p>
+<p>我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。</p>
+<h3 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h3><p>移动端监测与服务器监测最大的不同，应该在于移动端设备所处的网络环境是复杂多变的，而我们的心跳探活目的是确认端设备本身是否正常。</p>
+<p>因此在选择端设备与服务端的通信协议时，要求对网络依赖小且在比如弱网环境下依然稳定工作，这样才能避免网络环境不稳定造成的干扰，避免一些误判。</p>
+<p>Mqtt (Message Queue Telemetry Transport)协议是一种应用层协议，适用于资源受限例如低带宽、高延迟网络环境下的端到端通信。这种适用性主要是来自于它在包大小的精简以及对push消息场景的一些优化。</p>
+<p>因此最终选用的mqtt协议作为心跳探活的通信协议，mqtt的对比介绍还可参见：<a href="https://blogs.vmware.com/vfabric/2013/02/choosing-your-messaging-protocol-amqp-mqtt-or-stomp.html" target="_blank" rel="external">Choosing Your Messaging Protocol: AMQP, MQTT, or STOMP</a></p>
+<a id="more"></a>
+<h3 id="方案设计"><a href="#方案设计" class="headerlink" title="方案设计"></a>方案设计</h3><p>在mqtt协议中，一个主要的应用场景就是消息订阅及推送即pub/sub。基于pub/sub机制，我们就可以实现端到端的心跳传输：即一个端负责订阅某个topic的消息，另外一个端定时推送消息。</p>
+<p>那么在我们这种移动端-服务端的场景中，应该是谁来订阅，谁来推送呢？我们的目的是在服务端建立对移动端的健康监测，而消息推送（pub）是单向的，如果是移动端进行消息sub，服务端进行pub的话，那么移动端必须在收到消息后，再通过某个途径给服务端回一个ack。</p>
+<p>如果是移动端进行pub，服务端进行sub，那么仅需要移动端pub-&gt;mqtt-broker-&gt;服务端sub，即可完成一次完整的心跳探活。因此，我们最终选择使用移动端pub，服务端sub这种方案。</p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>mqtt协议有一个官方的实现库mosquitto，使用C语言实现，可参见：<a href="https://github.com/eclipse/mosquitto/tree/develop" target="_blank" rel="external">GitHub:eclipse/mosquitto</a>，这个库提供了基于mqtt协议的通信建立和维持、消息订阅及推送等功能。已经够我们的场景使用了。<br>而在iOS端我们主要使用Objective-C（以下简称OC）实现，因此我基于mosquitto库封装出OC层的调用方法，实现在OC层使用mqtt协议进行消息推送。<br>mosquitto库的api文档可参见：<a href="https://mosquitto.org/api/files/mosquitto-h.html#mosquitto_publish" target="_blank" rel="external">mosquitto-api</a><br>主要的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">// UAQMonitorMqttClient.h</div><div class="line">// 主要的变量及属性</div><div class="line"> </div><div class="line">// 声明了MQTTClient类</div><div class="line">@interface MQTTClient : NSObject &#123;</div><div class="line">    struct mosquitto *mosq; // 声明了一个mosquitto对象，由于底层是C写的，因此这里用的struct</div><div class="line">&#125;</div><div class="line"> </div><div class="line">@property (nonatomic, strong) dispatch_queue_t queue; // 使用iOS GCD维持的一个线程队列，用于维持跟服务端的连接，保证断线能重连</div><div class="line">@property (nonatomic, copy) void (^connectionCompletionHandler)(NSUInteger code); // 连接完成后的回调</div><div class="line"> </div><div class="line">// 定义了客户端及服务端的属性</div><div class="line">@property (nonatomic, copy) NSString *clientID;</div><div class="line">@property (nonatomic, copy) NSString *host;</div><div class="line">@property (nonatomic, assign) unsigned short port;</div><div class="line">@property (nonatomic, assign) unsigned short keepAlive;</div><div class="line">@property (nonatomic, assign) unsigned int reconnectDelay;</div><div class="line">@property (nonatomic, assign) unsigned int reconnectDelayMax;</div><div class="line">@property (nonatomic, assign) BOOL reconnectExponentialBackoff;</div><div class="line"> </div><div class="line"> </div><div class="line"> </div><div class="line">@property (nonatomic, assign) BOOL cleanSession; // 告诉服务端的broker是否在客户端断线后，清除所有消息及订阅，默认设置成了false</div><div class="line">@property (nonatomic, assign) BOOL connected; // 连接的状态</div><div class="line">@property (nonatomic, assign) BOOL looped; // 是否开启了线程队列 （上面说的dispatch_queue)</div><div class="line"> </div><div class="line"> </div><div class="line">// 定义使用mosquitto发送消息的质量，枚举值从小到大，对网络质量的要求逐渐提升，默认我们只有0级：即AtMostOnce</div><div class="line">typedef enum MQTTQualityOfService : NSUInteger &#123;</div><div class="line">    AtMostOnce,</div><div class="line">    AtLeastOnce,</div><div class="line">    ExactlyOnce</div><div class="line">&#125; MQTTQualityOfService;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div></pre></td><td class="code"><pre><div class="line">// UAQMonitorMqttClient.m</div><div class="line"> </div><div class="line">// 初始化一个MQTTClient类</div><div class="line">- (MQTTClient*) initWithMqttClient:(NSString *)clientId</div><div class="line">                        serverHost:(NSString *) host</div><div class="line">                        serverPort:(unsigned short) port</div><div class="line">                        cleanSession:(BOOL )cleanSession &#123;</div><div class="line">    if (!(self = [super init])) &#123;</div><div class="line">        NSLog(@&quot;[UAQMonitor] MqttClient init failed&quot;);</div><div class="line">        return nil;</div><div class="line">    &#125;</div><div class="line">    // Init mqtt configuration.</div><div class="line">    self.clientID = clientId;</div><div class="line">    self.host = host;</div><div class="line">    self.port = port;</div><div class="line">    // Time interval for server(block) ping the client.</div><div class="line">    self.keepAlive = 60;</div><div class="line">    self.reconnectDelay = 2;</div><div class="line">    self.reconnectDelayMax = 30;</div><div class="line">    self.reconnectExponentialBackoff = NO;</div><div class="line">    self.cleanSession = cleanSession;</div><div class="line">    self.looped = NO;</div><div class="line">         </div><div class="line">    const char* cstrClientId = [self.clientID cStringUsingEncoding:NSUTF8StringEncoding];</div><div class="line"> </div><div class="line">    // 创建一个mosquitto对象</div><div class="line">    mosq = mosquitto_new(cstrClientId, self.cleanSession, (__bridge void *)(self));</div><div class="line">    if (mosq == NULL) &#123;</div><div class="line">        NSLog(@&quot;[UAQMonitor] mosquitto create failed&quot;);</div><div class="line">        return nil;</div><div class="line">    &#125;</div><div class="line">         </div><div class="line">    // Set callback function for connect | disconnect.</div><div class="line">    mosquitto_connect_callback_set(mosq, on_connect);</div><div class="line">    mosquitto_disconnect_callback_set(mosq, on_disconnect);</div><div class="line"> </div><div class="line"> </div><div class="line">    // Set the TLS.</div><div class="line">    mosquitto_tls_opts_set(mosq, 0, &quot;tlsv1&quot;, NULL);</div><div class="line">    mosquitto_tls_psk_set(mosq, &quot;a645dce1f8644bbc46342abde10494eb&quot;, &quot;apm&quot;, NULL);</div><div class="line">    mosquitto_tls_insecure_set(mosq, true);</div><div class="line"> </div><div class="line">    // Connect</div><div class="line">    [self connectServer];</div><div class="line">     </div><div class="line">    // Loop</div><div class="line">    // 开启一个GCD线程队列</div><div class="line">    self.queue = dispatch_queue_create(&quot;mqtt_queue&quot;, NULL);</div><div class="line">    // 启动线程循环，目的是维持当前与服务端的连接，出现断线能自动重连</div><div class="line">    [self startLoop];</div><div class="line"> </div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"> </div><div class="line"> </div><div class="line">// 调用mosquitto lib的方法，向服务端broker发起连接</div><div class="line">- (void) connectServer &#123;</div><div class="line">    const char *cstrHost = [self.host cStringUsingEncoding:NSASCIIStringEncoding];</div><div class="line">    // 设置异常断线后的重试策略，按照当前默认值，会以2秒递增为等待时间不断尝试重连</div><div class="line">    mosquitto_reconnect_delay_set(mosq, self.reconnectDelay, self.reconnectDelayMax, self.reconnectExponentialBackoff);</div><div class="line">    mosquitto_connect(mosq, cstrHost, self.port, self.keepAlive);</div><div class="line">&#125;</div><div class="line"> </div><div class="line"> </div><div class="line">// 开启线程循环，维持连接不断，或者断线后重连</div><div class="line">- (void) startLoop &#123;</div><div class="line">    if (!self.queue) &#123;</div><div class="line">        NSLog(@&quot;[UAQMonitor] mqtt start loop fail with no dispatch queue&quot;);</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line">    dispatch_async(self.queue, ^&#123;</div><div class="line">        DLog(@&quot;[Heartbeat]start mosquitto loop&quot;);</div><div class="line">        self.looped = YES;</div><div class="line">        // 调用mosquitto lib方法，发起一个循环，阻塞该线程，作用就是不断的判断当前连接是否正常及异常情况下的断线重连</div><div class="line">        // 看mosquitto文档，实际上这个mosquitto_loop_forever应该是使用了IO多路复用的机制中的select()函数，第二个参数为-1，即设置在调用select的超时时间为1秒（-1表示使用默认值：1s）,第三个参数无意义</div><div class="line">        int ret = mosquitto_loop_forever(mosq, -1, 1);</div><div class="line">        self.looped = NO;</div><div class="line">        DLog(@&quot;[Heartbeat]end mosquitto loop with return value: %d&quot;, ret);</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line"> </div><div class="line"> </div><div class="line">// 开始发心跳,即向服务端push消息</div><div class="line">- (void)startHeartbeat:(NSString *)timeval payLoad:(NSString *)payLoad &#123;</div><div class="line">    NSString* mqttTopic = [NSString stringWithFormat:@&quot;gate/%@/heartbeat&quot;,self.clientID];</div><div class="line">    DLog(@&quot;[Heartbeat]Start heart beat with the time interval: %f&quot;, [timeval doubleValue]);</div><div class="line">    // Send a heartbeat firstly.</div><div class="line">     // 启动的时候马上发一条，调用的方法为publishData</div><div class="line">    [self publishData:payLoad</div><div class="line">              toTopic:mqttTopic</div><div class="line">              withQos:AtMostOnce</div><div class="line">               retain:NO</div><div class="line">    completionHandler:^(int ret) &#123;</div><div class="line">        DLog(@&quot;[Heartbeat] send %@ to MQTT Topic: %@ with return vaule: %d&quot;, payLoad, mqttTopic, ret);</div><div class="line">    &#125;];</div><div class="line"> </div><div class="line">    // Start a timer to send heartbeat periodic.</div><div class="line">    // 调用UAQMonitor定时器来建立定时push消息的机制</div><div class="line">    [[UAQMonitorGCDTimerManager sharedInstance] scheduledDispatchTimerWithName:@&quot;mqtt_timer&quot;</div><div class="line">                                                                  timeInterval:[timeval doubleValue]</div><div class="line">                                                                         queue:nil</div><div class="line">                                                                       repeats:YES</div><div class="line">                                                                  actionOption:AbandonPreviousAction action:^&#123;</div><div class="line">        [self publishData:payLoad</div><div class="line">                  toTopic:mqttTopic</div><div class="line">                  withQos:AtMostOnce</div><div class="line">                   retain:NO</div><div class="line">        completionHandler:^(int ret) &#123;</div><div class="line">            DLog(@&quot;[Heartbeat] send %@ to MQTT Topic: %@ with return vaule: %d&quot;, payLoad, mqttTopic, ret);</div><div class="line">            if (!self.looped) &#123;</div><div class="line">                DLog(@&quot;[Heartbeat] mqtt loop ended, try to restart it&quot;);</div><div class="line">                [self startLoop];</div><div class="line">            &#125;</div><div class="line">        &#125;];</div><div class="line">    &#125;];</div><div class="line">     </div><div class="line">&#125;</div><div class="line"> </div><div class="line"> </div><div class="line">// 基于mosquitto_publish封装的发送心跳的方法</div><div class="line">// qos默认为最低等级AtMostOnce</div><div class="line">// 最后一个参数为服务端是否要求保留该message，默认是NO</div><div class="line">- (void)publishData:(NSString *)payload</div><div class="line">            toTopic:(NSString *)topic</div><div class="line">            withQos:(MQTTQualityOfService)qos</div><div class="line">             retain:(BOOL)retain</div><div class="line">  completionHandler:(void (^)(int mid))completionHandler &#123;</div><div class="line">    const char* cstrTopic = [topic cStringUsingEncoding:NSUTF8StringEncoding];</div><div class="line">    int mid;</div><div class="line">    // 调用mosquitto lib方法来push消息</div><div class="line">    int ret = mosquitto_publish(mosq, &amp;mid, cstrTopic, (int)payload.length, [payload dataUsingEncoding:NSUTF8StringEncoding].bytes, qos, retain);</div><div class="line">    if (completionHandler) &#123;</div><div class="line">        completionHandler(ret);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/20171009/使用mqtt协议实现iOS端心跳探活.html/" data-id="cj8jj5u810008qe9kfuey07rj" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/20171009/项目版本号自动化实践.html/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">项目版本号自动化实践</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/20171009/使用mqtt协议实现iOS端心跳探活.html/">使用mqtt协议实现iOS端心跳探活</a>
+          </li>
+        
+          <li>
+            <a href="/20171009/项目版本号自动化实践.html/">项目版本号自动化实践</a>
+          </li>
+        
+          <li>
+            <a href="/20171008/Cronet静态库编译解决方案.html/">Cronet静态库编译解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/20171008/Cronet双端持续集成发布实践.html/">Cronet双端持续集成发布实践</a>
+          </li>
+        
+          <li>
+            <a href="/20171006/使用python-unidiff库分析git-diff.html/">使用python unidiff库分析git diff</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Krisen Tan<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
