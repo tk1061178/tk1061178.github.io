@@ -68,6 +68,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-双端前后台状态通知机制实现" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/20171014/双端前后台状态通知机制实现.html/" class="article-date">
+  <time datetime="2017-10-14T06:40:25.000Z" itemprop="datePublished">2017-10-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/20171014/双端前后台状态通知机制实现.html/">移动端前后台状态通知机制实现</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>为了支持端上网络库内部组件获取App状态，以便使用合适的策略，例如如果当前App在后台，网络库便不再去主动解析DNS结果，这样可以节省对移动端设备的资源消耗。<br>因此项目需要做一个移动端前后台状态判断及通知机制。由于我们支持iOS和Android，因此这个特性也分别针对双端做，上层用一个抽象类封装。</p>
+<h3 id="概要设计"><a href="#概要设计" class="headerlink" title="概要设计"></a>概要设计</h3><ol>
+<li>初始化：网络库启动时，会初始化Notifier实例，但会根据不同的端实例化不同的子类。Notifier用于探测当前App状态并通过回调方式通知下游用户。</li>
+<li>用户注册：我们提供了标准的用户回调抽象类，下游用户通过继承并实现具体的抽象方法生成新的实例，并将该实例注册进Notifier。</li>
+<li>在状态发生变更时，Notifier会轮询一遍所有等待回调的用户（第2步注册进来的）触发用户自定义动作。</li></ol>
+        
+          <p class="article-more-link">
+            <a href="/20171014/双端前后台状态通知机制实现.html/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/20171014/双端前后台状态通知机制实现.html/" data-id="cj8sr6rk0000c1p9koev3kaxj" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-C-静态库符号冲突解决方案" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/20171009/C-静态库符号冲突解决方案.html/" class="article-date">
@@ -102,7 +147,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/C-静态库符号冲突解决方案.html/" data-id="cj8jn21w40000pw9k0pfx02gi" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/C-静态库符号冲突解决方案.html/" data-id="cj8sr6ris00001p9k20hyfj1z" class="article-share-link">Share</a>
       
       
     </footer>
@@ -146,7 +191,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/项目开源解决方案.html/" data-id="cj8jn21xe000epw9kftl409jp" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/项目开源解决方案.html/" data-id="cj8sr6rk5000f1p9ktw2lh0a9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -188,7 +233,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/iOS-webview-网络请求代理调研.html/" data-id="cj8jn21x10008pw9kw37vkx8b" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/iOS-webview-网络请求代理调研.html/" data-id="cj8sr6rjr00081p9kgtwh0on6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -229,7 +274,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/iOS版本导致NSURLSession表现不一致问题调研.html/" data-id="cj8jn21x40009pw9kvh1wkox8" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/iOS版本导致NSURLSession表现不一致问题调研.html/" data-id="cj8sr6rju00091p9k5wbloaw8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -275,7 +320,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/使用mqtt协议实现iOS端心跳探活.html/" data-id="cj8jn21x7000bpw9k50sfrezc" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/使用mqtt协议实现iOS端心跳探活.html/" data-id="cj8sr6rjy000b1p9kgprbpniu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -327,7 +372,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171009/项目版本号自动化实践.html/" data-id="cj8jn21xg000fpw9kopzp6dik" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171009/项目版本号自动化实践.html/" data-id="cj8sr6rk6000g1p9keboqcqru" class="article-share-link">Share</a>
       
       
     </footer>
@@ -369,7 +414,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171008/Cronet静态库编译解决方案.html/" data-id="cj8jn21wu0005pw9k7rca0csj" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171008/Cronet静态库编译解决方案.html/" data-id="cj8sr6rji00041p9kp61je4ou" class="article-share-link">Share</a>
       
       
     </footer>
@@ -413,7 +458,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171008/Cronet双端持续集成发布实践.html/" data-id="cj8jn21wp0004pw9kmecxr3er" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171008/Cronet双端持续集成发布实践.html/" data-id="cj8sr6rjb00031p9kb9kach22" class="article-share-link">Share</a>
       
       
     </footer>
@@ -455,50 +500,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/使用python-unidiff库分析git-diff.html/" data-id="cj8jn21x9000cpw9k1lfatf0c" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-在chromium项目中支持gcov单测覆盖率" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/20171006/在chromium项目中支持gcov单测覆盖率.html/" class="article-date">
-  <time datetime="2017-10-06T12:19:59.000Z" itemprop="datePublished">2017-10-06</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/20171006/在chromium项目中支持gcov单测覆盖率.html/">在chromium项目中支持gcov单测覆盖率</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="简单介绍一下gcov和lcov"><a href="#简单介绍一下gcov和lcov" class="headerlink" title="简单介绍一下gcov和lcov"></a>简单介绍一下gcov和lcov</h4><p>gcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用<br>在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能<br>在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。<br>对可执行文件进行一次运行，即可得到.gcda文件<br>最终，用gcov工具对源代码进行处理，得到.gcov文件，即为我们需要的覆盖信息的初试状态</p>
-<p>因为gcov生成的是纯文字，不好直观展现，lcov工具就是在gcov的基础上，生成html做了界面化展现。</p>
-<p>我们准备在chromium项目(Cronet)中新增gcov单测覆盖率<br>chromium使用的是Google自研的gn &amp; ninja，前者gn是用于生成类似Makefile的编译文件，后者进行真正的编译，产出对象文件<br>关于chromium的编译可以参考官方文档：<a href="https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md" target="_blank" rel="external">https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md</a><br></p>
-        
-          <p class="article-more-link">
-            <a href="/20171006/在chromium项目中支持gcov单测覆盖率.html/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8jn21xc000dpw9k2ersp6nj" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/使用python-unidiff库分析git-diff.html/" data-id="cj8sr6rk2000d1p9kbf4w2ngt" class="article-share-link">Share</a>
       
       
     </footer>
@@ -542,6 +544,10 @@
       <ul>
         
           <li>
+            <a href="/20171014/双端前后台状态通知机制实现.html/">移动端前后台状态通知机制实现</a>
+          </li>
+        
+          <li>
             <a href="/20171009/C-静态库符号冲突解决方案.html/">C++静态库符号冲突解决方案</a>
           </li>
         
@@ -555,10 +561,6 @@
         
           <li>
             <a href="/20171009/iOS版本导致NSURLSession表现不一致问题调研.html/">iOS版本导致NSURLSession表现不一致问题调研</a>
-          </li>
-        
-          <li>
-            <a href="/20171009/使用mqtt协议实现iOS端心跳探活.html/">使用mqtt协议实现iOS端心跳探活</a>
           </li>
         
       </ul>

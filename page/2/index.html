@@ -68,6 +68,49 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-在chromium项目中支持gcov单测覆盖率" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/20171006/在chromium项目中支持gcov单测覆盖率.html/" class="article-date">
+  <time datetime="2017-10-06T12:19:59.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/20171006/在chromium项目中支持gcov单测覆盖率.html/">在chromium项目中支持gcov单测覆盖率</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="简单介绍一下gcov和lcov"><a href="#简单介绍一下gcov和lcov" class="headerlink" title="简单介绍一下gcov和lcov"></a>简单介绍一下gcov和lcov</h4><p>gcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用<br>在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能<br>在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。<br>对可执行文件进行一次运行，即可得到.gcda文件<br>最终，用gcov工具对源代码进行处理，得到.gcov文件，即为我们需要的覆盖信息的初试状态</p>
+<p>因为gcov生成的是纯文字，不好直观展现，lcov工具就是在gcov的基础上，生成html做了界面化展现。</p>
+<p>我们准备在chromium项目(Cronet)中新增gcov单测覆盖率<br>chromium使用的是Google自研的gn &amp; ninja，前者gn是用于生成类似Makefile的编译文件，后者进行真正的编译，产出对象文件<br>关于chromium的编译可以参考官方文档：<a href="https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md" target="_blank" rel="external">https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md</a><br></p>
+        
+          <p class="article-more-link">
+            <a href="/20171006/在chromium项目中支持gcov单测覆盖率.html/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/20171006/在chromium项目中支持gcov单测覆盖率.html/" data-id="cj8sr6rk4000e1p9ktfpbwog2" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Cronet-httpCache基本逻辑" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/20171006/Cronet-httpCache基本逻辑.html/" class="article-date">
@@ -99,7 +142,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/" data-id="cj8jn21wd0002pw9k5bhafygw" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/Cronet-httpCache基本逻辑.html/" data-id="cj8sr6riy00011p9k7xx5p3zq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -140,7 +183,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171006/Cronet-http-header相关逻辑梳理.html/" data-id="cj8jn21wa0001pw9kxv2tnqjp" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171006/Cronet-http-header相关逻辑梳理.html/" data-id="cj8sr6rj100021p9kskmz585b" class="article-share-link">Share</a>
       
       
     </footer>
@@ -192,7 +235,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20171005/Cronet代码解析-URLRequest.html/" data-id="cj8jn21wn0003pw9klq6xt4t5" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20171005/Cronet代码解析-URLRequest.html/" data-id="cj8sr6rjk00051p9k49b9hpxx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -236,7 +279,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8jn21x6000apw9kz9q23zmd" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20170924/twemproxy部署效率的优化实践.html/" data-id="cj8sr6rjw000a1p9kxfxsej0i" class="article-share-link">Share</a>
       
       
     </footer>
@@ -278,7 +321,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170924/Redis-sync.html/" data-id="cj8jn21ww0006pw9kalefaqtp" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20170924/Redis-sync.html/" data-id="cj8sr6rjn00061p9khyzg3utg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -315,7 +358,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/20170919/hello-world.html/" data-id="cj8jn21wy0007pw9kt3i4mntt" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/20170919/hello-world.html/" data-id="cj8sr6rjp00071p9khuf42qrg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -359,6 +402,10 @@
       <ul>
         
           <li>
+            <a href="/20171014/双端前后台状态通知机制实现.html/">移动端前后台状态通知机制实现</a>
+          </li>
+        
+          <li>
             <a href="/20171009/C-静态库符号冲突解决方案.html/">C++静态库符号冲突解决方案</a>
           </li>
         
@@ -372,10 +419,6 @@
         
           <li>
             <a href="/20171009/iOS版本导致NSURLSession表现不一致问题调研.html/">iOS版本导致NSURLSession表现不一致问题调研</a>
-          </li>
-        
-          <li>
-            <a href="/20171009/使用mqtt协议实现iOS端心跳探活.html/">使用mqtt协议实现iOS端心跳探活</a>
           </li>
         
       </ul>
