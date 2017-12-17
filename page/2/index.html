@@ -68,6 +68,48 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-使用python-unidiff库分析git-diff" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/27683891/" class="article-date">
+  <time datetime="2017-10-06T15:09:53.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/27683891/">使用python unidiff库分析git diff</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>这里分享一个python写的分离特定的git修改的方法。<br>主要应用的问题是当时项目组需要同步chromium最新代码，结果带来了巨大量的改动，为了节省我们review新代码的时间，需要将一些不重要的修改（携带某种特征，例如新版本的chromium大量替换了智能指针，将自研的scoped_ptr变成了std::unique_ptr）分离出来，剩下的就是重要的修改了。</p>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>这里主要用到python的unidiff库，这个库可以解析出标准的unified diff data，git diff恰好就是这个格式。<br></p>
+        
+          <p class="article-more-link">
+            <a href="/blog/27683891/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/blog/27683891/" data-id="cjbazmg63000cne9k6wffy99p" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-在chromium项目中支持gcov单测覆盖率" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog/67201122/" class="article-date">
@@ -101,7 +143,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/blog/67201122/" data-id="cjbayxxk2000edt9ktbe560rd" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/blog/67201122/" data-id="cjbazmg67000fne9kf1k2z9ym" class="article-share-link">Share</a>
       
       
     </footer>
@@ -142,7 +184,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/blog/ef0c76f5/" data-id="cjbayxxj00002dt9kiht6xpbb" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/blog/ef0c76f5/" data-id="cjbazmg4v0001ne9krst69jeh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -183,7 +225,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/blog/7f21d20d/" data-id="cjbayxxiw0001dt9kksblnoj5" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/blog/7f21d20d/" data-id="cjbazmg500002ne9k03t5q3mg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -235,7 +277,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/blog/292fdeb9/" data-id="cjbayxxj90003dt9kea2uzf9g" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/blog/292fdeb9/" data-id="cjbazmg5b0003ne9kmp0jv7pk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -279,7 +321,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/blog/dfbcdc9a/" data-id="cjbayxxjt000adt9kf6xuj408" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/blog/dfbcdc9a/" data-id="cjbazmg61000bne9ko25c3brj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -321,7 +363,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/blog/bb98e323/" data-id="cjbayxxjk0006dt9kakifjtrs" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/blog/bb98e323/" data-id="cjbazmg5p0007ne9kv5mz53o0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -358,7 +400,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://kkrisen.top/blog/daacbe36/" data-id="cjbayxxjm0007dt9kyyzj8g62" class="article-share-link">Share</a>
+      <a data-url="http://kkrisen.top/blog/daacbe36/" data-id="cjbazmg5r0008ne9k00c2cxbb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -389,7 +431,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
     </div>
   </div>
 
@@ -400,6 +442,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog/b394f60a/">Meaningful day</a>
+          </li>
         
           <li>
             <a href="/blog/fcf2134a/">移动端前后台状态通知机制实现</a>
@@ -415,10 +461,6 @@
         
           <li>
             <a href="/blog/2cad0b6d/">iOS webview 网络请求代理调研</a>
-          </li>
-        
-          <li>
-            <a href="/blog/d433ace1/">iOS版本导致NSURLSession表现不一致问题调研</a>
           </li>
         
       </ul>
