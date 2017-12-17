@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>twemproxy部署效率的优化实践 | Tkooops</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景介绍twemproxy是twitter开源出来的一款用于存储集群的反向代理。常见于Redis集群，加入了twemproxy的Redis集群其请求流程可以简化为：用户-&amp;gt;twemproxy-&amp;gt;Redis，用户只需要与twemproxy建立连接并发送请求，twemproxy通过配置在自身的路由表及均衡策略，将请求转发至相应后端。 本章主要记录一下实习时做的一个twemproxy批量部署">
+<meta property="og:type" content="article">
+<meta property="og:title" content="twemproxy部署效率的优化实践">
+<meta property="og:url" content="http://kkrisen.top/blog/dfbcdc9a/index.html">
+<meta property="og:site_name" content="Tkooops">
+<meta property="og:description" content="背景介绍twemproxy是twitter开源出来的一款用于存储集群的反向代理。常见于Redis集群，加入了twemproxy的Redis集群其请求流程可以简化为：用户-&amp;gt;twemproxy-&amp;gt;Redis，用户只需要与twemproxy建立连接并发送请求，twemproxy通过配置在自身的路由表及均衡策略，将请求转发至相应后端。 本章主要记录一下实习时做的一个twemproxy批量部署">
+<meta property="og:updated_time" content="2017-12-15T01:52:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="twemproxy部署效率的优化实践">
+<meta name="twitter:description" content="背景介绍twemproxy是twitter开源出来的一款用于存储集群的反向代理。常见于Redis集群，加入了twemproxy的Redis集群其请求流程可以简化为：用户-&amp;gt;twemproxy-&amp;gt;Redis，用户只需要与twemproxy建立连接并发送请求，twemproxy通过配置在自身的路由表及均衡策略，将请求转发至相应后端。 本章主要记录一下实习时做的一个twemproxy批量部署">
+  
+    <link rel="alternate" href="/atom.xml" title="Tkooops" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Tkooops</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">techkeeper</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://kkrisen.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-twemproxy部署效率的优化实践" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/dfbcdc9a/" class="article-date">
+  <time datetime="2017-09-24T15:56:25.000Z" itemprop="datePublished">2017-09-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      twemproxy部署效率的优化实践
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2><span id="背景介绍">背景介绍</span></h2><p>twemproxy是twitter开源出来的一款用于存储集群的反向代理。常见于Redis集群，加入了twemproxy的Redis集群其请求流程可以简化为：用户-&gt;twemproxy-&gt;Redis，用户只需要与twemproxy建立连接并发送请求，twemproxy通过配置在自身的路由表及均衡策略，将请求转发至相应后端。</p>
+<p>本章主要记录一下实习时做的一个twemproxy批量部署脚本，其目的是节省运维人力，提升新建Redis集群速度。</p>
+<h2><span id="一些前提">一些前提</span></h2><p>公司内的Redis集群并不是使用的纯开源的，而是基于开源代码自研的，其中就包括Redis中控（类似于开源里的sentinel）。</p>
+<p>另外有个用于集群管理的paas平台，在使用该脚本进行部署前，已经通过平台将Redis及twemproxy配置写入了Redis中控。主要的信息包括待部署的机器ip、端口、实例路由表（Redis）<br><a id="more"></a></p>
+<h2><span id="解决方案">解决方案</span></h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="keyword">if</span> [[ <span class="variable">$#</span> != 2 ]]; <span class="keyword">then</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"usage: <span class="variable">$0</span> &lt;proxy_id&gt; &lt;proxy_package&gt;"</span></div><div class="line">    <span class="built_in">exit</span> 1</div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line">proxy_id=<span class="variable">$1</span>  <span class="comment"># 目标proxy组ID</span></div><div class="line">dst_path=<span class="variable">$2</span>  <span class="comment"># proxy包名,用作部署的基础包环境</span></div><div class="line">base_path=$(<span class="built_in">cd</span> `dirname <span class="variable">$0</span>`; <span class="built_in">pwd</span>)</div><div class="line"><span class="keyword">if</span> [ ! -d <span class="string">"<span class="variable">$base_path</span>/<span class="variable">$dst_path</span>"</span> ]; <span class="keyword">then</span>  <span class="comment"># 当前包不存在，退出</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$dst_path</span> not existed"</span></div><div class="line">    <span class="built_in">exit</span> -1</div><div class="line"><span class="keyword">fi</span></div><div class="line">cnt=$(<span class="variable">$base_path</span>/redis/bin/redis-cli -h 10.xx.xx.xx -p xx mpget <span class="variable">$proxy_id</span> | sed -n <span class="string">'6p'</span>)</div><div class="line"><span class="keyword">if</span> [ ! <span class="variable">$cnt</span> ]; <span class="keyword">then</span>                    <span class="comment"># proxy组ID不存在，退出</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"The proxy group id <span class="variable">$proxy_id</span> not existed"</span></div><div class="line">    <span class="built_in">exit</span> -1</div><div class="line"><span class="keyword">fi</span></div><div class="line">str=$(<span class="variable">$base_path</span>/redis/bin/redis-cli -h 10.xx.xx.xx -p xx mpget <span class="variable">$proxy_id</span> | sed -n <span class="string">'8p'</span>) <span class="comment"># 从中控server获取proxy信息</span></div><div class="line">i=0</div><div class="line"><span class="keyword">while</span>((<span class="variable">$i</span>&lt;cnt))</div><div class="line"><span class="keyword">do</span></div><div class="line">    i=$((<span class="variable">$i</span>+1))</div><div class="line">    proxy_ins_id=$(<span class="built_in">echo</span> <span class="variable">$str</span> | cut -d , -f <span class="variable">$i</span>)</div><div class="line">    <span class="built_in">echo</span> <span class="variable">$proxy_ins_id</span></div><div class="line">    proxy_ins_st=$(<span class="variable">$base_path</span>/redis/bin/redis-cli -h 10.xx.xx.xx -p xx mpiget <span class="variable">$proxy_ins_id</span> | sed  -n <span class="string">'6p'</span>) <span class="comment"># 获取当前实例状态，用于容错</span></div><div class="line">    <span class="built_in">echo</span> <span class="variable">$proxy_ins_st</span></div><div class="line">    <span class="keyword">if</span> [ 1 -eq <span class="variable">$proxy_ins_st</span> ]; <span class="keyword">then</span>       <span class="comment"># 如果当前实例已正常运行，则跳过</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"The proxy_ins <span class="variable">$proxy_ins_id</span> has running already"</span></div><div class="line">        <span class="built_in">continue</span></div><div class="line">    <span class="keyword">fi</span></div><div class="line">    proxy_ins_ip=$(<span class="variable">$base_path</span>/redis/bin/redis-cli -h 10.xx.xx.xx -p xx mpiget <span class="variable">$proxy_ins_id</span> | sed  -n <span class="string">'4p'</span>)</div><div class="line">    <span class="built_in">echo</span> <span class="variable">$proxy_ins_ip</span></div><div class="line">    ssh <span class="variable">$proxy_ins_ip</span> <span class="string">"ls /home/map/<span class="variable">$dst_path</span>"</span></div><div class="line">    <span class="keyword">if</span> [ $? -eq 0 ]; <span class="keyword">then</span>                <span class="comment"># 如果目标机器proxy目录已存在，则跳过</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"The /home/map/<span class="variable">$dst_path</span> has already existed"</span></div><div class="line">        <span class="built_in">continue</span></div><div class="line">    <span class="keyword">fi</span></div><div class="line">    scp -r <span class="variable">$base_path</span>/<span class="variable">$dst_path</span> <span class="variable">$proxy_ins_ip</span>:/home/map/ <span class="comment"># 将基础twmeproxy包分发到目的机器上</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"-----------------copy_done---------------"</span></div><div class="line">    ssh <span class="variable">$proxy_ins_ip</span> <span class="string">"cd /home/map/<span class="variable">$dst_path</span>/conf &amp;&amp; sed  -i 's/proxy_ins_id.*/proxy_ins_id: '<span class="variable">$proxy_ins_id</span>'/g' nutcracker.yml"</span> <span class="comment"># 更新路由表配置</span></div><div class="line">    ssh <span class="variable">$proxy_ins_ip</span> <span class="string">"cd /home/map/<span class="variable">$dst_path</span> &amp;&amp; ./nutcracker_control.sh start &amp;&amp; sleep 1 &amp;&amp; ./nutcracker_control.sh stats"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"******************finish*****************"</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+<h2><span id="改进思考">改进思考</span></h2><p>由于工作方向和时间上的问题，没有在twemproxy部署优化上再继续做一些更有意义的事。现在想来也有些感触，在一些问题上没有追求极致的做下去，让我感到很多遗憾。当时有了这样一个微不足道的工具，就已经让组里运维同学有了明显的释放感，但还可以做更多。</p>
+<ul>
+<li><p>paas平台与部署脚本联动，当前还是手动在平台设置，再去手动执行部署脚本。但如果把部署本身置于平台内部，成为paas的功能一部分，对用户透明，不是更加方便。</p>
+</li>
+<li><p>参考成熟的虚拟化paas平台，能够自动实现硬件资源的管理和分配。落实到我们的场景就是，不再需要人工寻找可用的机器和端口，运维同学只需要告诉平台需要的实例数目及部署地域，平台根据一定规则自动找寻可用的硬件资源并自动部署。（事实上这块在实习结束后同事们做的Redis虚拟化工作已经实现了）。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/blog/dfbcdc9a/" data-id="cjbayxxjt000adt9kf6xuj408" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/292fdeb9/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Cronet代码解析-URLRequest
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/bb98e323/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Redis-sync</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/fcf2134a/">移动端前后台状态通知机制实现</a>
+          </li>
+        
+          <li>
+            <a href="/blog/4ed07732/">C++静态库符号冲突解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/9ef298c6/">项目开源解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2cad0b6d/">iOS webview 网络请求代理调研</a>
+          </li>
+        
+          <li>
+            <a href="/blog/d433ace1/">iOS版本导致NSURLSession表现不一致问题调研</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Krisen Tan<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
