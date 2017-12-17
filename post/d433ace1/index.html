@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>iOS版本导致NSURLSession表现不一致问题调研 | Tkooops</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="问题描述iOS8.1系统上，使用Cronet测试网络请求，请求未能使用经过Cronet发送，仍使用iOS自身系统网络库。在iOS 9及以上系统未出现这个问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS版本导致NSURLSession表现不一致问题调研">
+<meta property="og:url" content="http://kkrisen.top/post/d433ace1/index.html">
+<meta property="og:site_name" content="Tkooops">
+<meta property="og:description" content="问题描述iOS8.1系统上，使用Cronet测试网络请求，请求未能使用经过Cronet发送，仍使用iOS自身系统网络库。在iOS 9及以上系统未出现这个问题。">
+<meta property="og:image" content="http://kkrisen.top/post/d433ace1/iOS_consist.png">
+<meta property="og:updated_time" content="2017-12-15T01:52:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS版本导致NSURLSession表现不一致问题调研">
+<meta name="twitter:description" content="问题描述iOS8.1系统上，使用Cronet测试网络请求，请求未能使用经过Cronet发送，仍使用iOS自身系统网络库。在iOS 9及以上系统未出现这个问题。">
+<meta name="twitter:image" content="http://kkrisen.top/post/d433ace1/iOS_consist.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Tkooops" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Tkooops</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">techkeeper</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Søk"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://kkrisen.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-iOS版本导致NSURLSession表现不一致问题调研" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/post/d433ace1/" class="article-date">
+  <time datetime="2017-10-09T02:18:45.000Z" itemprop="datePublished">2017-10-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      iOS版本导致NSURLSession表现不一致问题调研
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3><span id="问题描述">问题描述</span></h3><p>iOS8.1系统上，使用Cronet测试网络请求，请求未能使用经过Cronet发送，仍使用iOS自身系统网络库。在iOS 9及以上系统未出现这个问题。</p>
+<a id="more"></a>
+<p>在iOS上，Cronet是这样代理网络请求的。<br>我们注册了自定义的NSURLProtocol类来拦截NSURLSession请求，注册流程可以分为这些步骤：</p>
+<ol>
+<li><p>sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration]初始化一个默认的NSURLSessionConfiguration。</p>
+</li>
+<li><p>[Cronet registerNSURLSessionConfiguration:sessionConfig]将CroNet自定义的NSURLProtocol class加入到sessionConfig中。<br>使用sessionConfig初始化一个NSURLSession，之后发请求使用NSURLSession即可。</p>
+</li>
+<li><p>CroNet还提供unregisterNSURLSessionConfiguration:(NSURLSessionConfiguration*)方法，可以将参数SessionConfig中的自定义protocol抹除，恢复成系统默认SessionConfig。我们期待的效果是，只要调用了该方法，网络请求就开始走系统默认路径而不是CroNet。</p>
+</li>
+</ol>
+<p>在我们的测试demo中，使用了一个全局的NSURLSession，启动时会start CroNet，并将上述1、2步骤都执行好，此时执行普通的发送请求，会命中CroNet，结果符合预期。</p>
+<p>然后我执行了步骤3，unregister之后，网络请求又会回到系统网络库，此时依然符合预期。</p>
+<p>那么如果我如果再执行1、2，请求居然不会再命中CroNet了，此处不符合预期了。</p>
+<h3><span id="初步调研原因">初步调研原因</span></h3><p>经过打印内存地址，最终确定原因为：</p>
+<p>步骤1产生了一个新的defaultSessionConfiguration，这样导致sessionConfig已经不是步骤3中NSURLSession中引用的sessionConfig，使用新的sessionConfig进行步骤3并不会对NSURLSession中原本的sessionConfig产生影响，因此导致之后的请求依然走系统库，进不去CroNet。</p>
+<h3><span id="问题疑点">问题疑点</span></h3><p>问题其实还有个重要的问题没解释：<br>为啥问题在iOS9/10没有出现</p>
+<p>我们做了对照实验，唯一变量是系统版本，iOS8必现问题，iOS9/10没有问题，那必然是不同版本之间在一些系统级别的实现存在diff。这种diff会带来新的问题吗</p>
+<p>在参考了苹果官方文档后，确定了根本原因：<br><img src="/post/d433ace1/iOS_consist.png" alt="iOS_consist"><br><a href="https://developer.apple.com/reference/foundation/nsurlsession/1411477-configuration?language=objc" target="_blank" rel="external">NSURLSession - Configuration by Apple documentation</a><br>参看苹果开发者文档的解释，从iOS9开始，苹果是把NSURLSessionConfiguration拷贝了一份放在NSURLSession中，而在iOS9以下只是一个引用。</p>
+<p>因此文档中也这么提醒了，在iOS9及以上，对于源sessionConfig的任何修改都不会影响到NSURLSession上，因此CroNet stop（会将源sessionConfig中的自定义NSURLProtocol remove掉）之后，NSURLSession不受影响，它依然认为自己应该将请求灌到CroNet中去，所以未察觉出问题。</p>
+<h3><span id="解决方案">解决方案</span></h3><p>解决方案</p>
+<ol>
+<li>高版本(iOS 9/10 及以上)的NSURLSession一经创建，就无法修改其SessionConfig，因此影响1目前无有效方法解决。只能声明在高版本中，如果要更换NSURLSession中的SessionConfig，需重新创建NSURLSession。</li>
+</ol>
+<ol>
+<li><p>修改代码， 在CroNet stop之后，使canInitWithRequest方法妥善处理灌入的请求：即CroNet running的时候会走CroNet，被stop后，返回false并走系统网络库。</p>
+</li>
+<li><p>在CroNet stop后把unregisterAllNSURLSessionConfiguration步骤去掉，这样在stop后各个版本还是均尝试是否走CroNet，由于在上面2中对canInitWithRequest进行了修复，因此不会对业务造成影响。</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/post/d433ace1/" data-id="cjbayuufc00079q9k92ta0prz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/post/2cad0b6d/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          iOS webview 网络请求代理调研
+        
+      </div>
+    </a>
+  
+  
+    <a href="/post/55e96897/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用mqtt协议实现iOS端心跳探活</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Arkiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Siste innlegg</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/post/fcf2134a/">移动端前后台状态通知机制实现</a>
+          </li>
+        
+          <li>
+            <a href="/post/4ed07732/">C++静态库符号冲突解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/post/9ef298c6/">项目开源解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/post/2cad0b6d/">iOS webview 网络请求代理调研</a>
+          </li>
+        
+          <li>
+            <a href="/post/d433ace1/">iOS版本导致NSURLSession表现不一致问题调研</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Krisen Tan<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>项目开源解决方案 | Tkooops</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。 因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。 解决思路编译本质上是将代码翻译成机器可执行的二进制，因此在没有代码的情况下，直接提供二进制参与链接理论上是可行的。 因此该问题的解决思路是，将boringssl代">
+<meta property="og:type" content="article">
+<meta property="og:title" content="项目开源解决方案">
+<meta property="og:url" content="http://kkrisen.top/post/9ef298c6/index.html">
+<meta property="og:site_name" content="Tkooops">
+<meta property="og:description" content="背景计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。 因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。 解决思路编译本质上是将代码翻译成机器可执行的二进制，因此在没有代码的情况下，直接提供二进制参与链接理论上是可行的。 因此该问题的解决思路是，将boringssl代">
+<meta property="og:updated_time" content="2017-12-15T01:52:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="项目开源解决方案">
+<meta name="twitter:description" content="背景计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。 因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。 解决思路编译本质上是将代码翻译成机器可执行的二进制，因此在没有代码的情况下，直接提供二进制参与链接理论上是可行的。 因此该问题的解决思路是，将boringssl代">
+  
+    <link rel="alternate" href="/atom.xml" title="Tkooops" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Tkooops</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">techkeeper</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Søk"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://kkrisen.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-项目开源解决方案" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/post/9ef298c6/" class="article-date">
+  <time datetime="2017-10-09T03:21:47.000Z" itemprop="datePublished">2017-10-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      项目开源解决方案
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3><span id="背景">背景</span></h3><p>计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。</p>
+<p>因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。</p>
+<h3><span id="解决思路">解决思路</span></h3><p>编译本质上是将代码翻译成机器可执行的二进制，因此在没有代码的情况下，直接提供二进制参与链接理论上是可行的。</p>
+<p>因此该问题的解决思路是，将boringssl代码编译打包成libboringssl.a静态库，随代码库发布，用户使用时直接将libboringssl.a当做基础lib库。<br><a id="more"></a></p>
+<h3><span id="技术难点">技术难点</span></h3><p>这里的技术难点主要是如何将libboringssl.a库以恰当的方式链接进最终产物。</p>
+<p>在这之前，我们可以先产出一个不包含libboringssl.a的最终产物，做法是把boringssl的.cc代码都移除，只保留include头文件，再调整一下编译配置即可。</p>
+<p>而最终如何发生链接的可行方案如下：</p>
+<table>
+<thead>
+<tr>
+<th>方案描述</th>
+<th>优点</th>
+<th>缺点</th>
+<th>补充说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户手动将libboringssl.a加入link列表中</td>
+<td>CroNet不需要过多改动</td>
+<td>需要开源用户配合不同IDE、系统，进行最终链接方式不一样</td>
+<td>例如编译iOS时，用户将CroNet.framework 与 libboringssl.a都添加到Xcode的link库配置中。</td>
+</tr>
+<tr>
+<td>CroNet编译链接过程中，修改编译文件（.ninja）使其主动链接libboringssl.a</td>
+<td>对开源用户无感知</td>
+<td>对CroNet改动较大实现方式比较trick，可能需要两次编译（编译过程同时修改编译文件可能不会对本次编译生效</td>
+<td>由于编译阶段才会出现.ninja编译文件，并且我还需要获取当前的编译参数（如当前系统版本）决定链接哪个版本的libboringssl.a。因此只能在编译阶段触发某个脚本同时进行。</td>
+</tr>
+<tr>
+<td>实现编译后置配置（ninja支持）在编译最后对libboringssl进行链接</td>
+<td>对开源用户无感知 实现方式遵循ninja编译流程（相较上一个方案不那么trick）</td>
+<td>对CroNet改动较大</td>
+<td>ninja支持动态库使用libs= [“”]表示需要链接某个已存在的库，并支持action描述后置脚本动作，可用于静态库在最终阶段通过后置动作链接某个库</td>
+</tr>
+</tbody>
+</table>
+<p>实际上方案2是在探索TurboNet自己链接方案的一个失败阶段，主要是方案比较trick结果又不完全符合预期，所以才重新构思了解决方案。</p>
+<p>最终采用了第三个方案。</p>
+<h3><span id="具体实现">具体实现</span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">// third_party/boringssl/BUILD.gn</div><div class="line"># Support header files for compilation without source codes.</div><div class="line"># 定义一个编译配置，将使用boringssl所需要的头文件加载进来</div><div class="line">config(&quot;lazy_build_config&quot;) &#123;</div><div class="line">  include_dirs = [ &quot;//baidu/build/boringssl/include&quot; ]</div><div class="line">&#125;</div><div class="line"> </div><div class="line">component(&quot;boringssl&quot;) &#123;</div><div class="line">   </div><div class="line">  # (Baidu Modified)</div><div class="line">  # (Baidu Added)</div><div class="line">  # Linking libs directly if it is open source solution.</div><div class="line">  # 定义了一个开关，如果打开，说明采取开源解决方案，直接link已存的lib</div><div class="line">  if (is_turbonet_opensource) &#123;</div><div class="line">    assert(is_android || is_ios || is_linux || is_mac, &quot;Your target_os doesn&apos;t support open source.&quot;)</div><div class="line">    public_configs = [ &quot;:lazy_build_config&quot; ]</div><div class="line">  # 对于动态库来说，直接使用gn &amp; ninja编译机制的libs机制进行链接即可</div><div class="line">    if (!is_turbonet_static) &#123;</div><div class="line">      if (is_ios) &#123;</div><div class="line">        libs = [ &quot;//baidu/build/boringssl/ios/libboringssl_shared.a&quot; ]</div><div class="line">      &#125; else if (is_android) &#123;</div><div class="line">        libs = [ &quot;//baidu/build/boringssl/android/libboringssl.a&quot; ]</div><div class="line">      &#125; else if (is_linux) &#123;</div><div class="line">        libs = [</div><div class="line">          &quot;//baidu/build/boringssl/linux/libboringssl.a&quot;,</div><div class="line">          # 对于非移动端操作系统，需要再link下asm库</div><div class="line">          &quot;//baidu/build/boringssl/linux/libboringssl_asm.a&quot;</div><div class="line">        ]</div><div class="line">      &#125; else if (is_mac) &#123;</div><div class="line">        libs = [</div><div class="line">          &quot;//baidu/build/boringssl/mac/libboringssl.a&quot;,</div><div class="line">          &quot;//baidu/build/boringssl/mac/libboringssl_asm.a&quot;</div><div class="line">        ]</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  # (Baidu Added End)</div><div class="line">  &#125; else &#123;</div><div class="line">    # 如果关闭了开源开关（默认也是关闭的），走原本逻辑，源代码都在all_sources里</div><div class="line">    sources = all_sources</div><div class="line">    deps = [</div><div class="line">      &quot;:boringssl_asm&quot;,</div><div class="line">    ]</div><div class="line">    public_configs = [ &quot;:external_config&quot; ]</div><div class="line">    configs += [ &quot;:internal_config&quot; ]</div><div class="line">    configs -= [ &quot;//build/config/compiler:chromium_code&quot; ]</div><div class="line">    configs += [ &quot;//build/config/compiler:no_chromium_code&quot; ]</div><div class="line">    # (Baidu Added)</div><div class="line">    # Fix symbols conflict for static library</div><div class="line">    if (is_ios &amp;&amp; is_turbonet_static) &#123;</div><div class="line">      configs += [ &quot;:boringssl_preheader&quot; ]</div><div class="line">    &#125;</div><div class="line">    # (Baidu Added End)</div><div class="line">    if (is_nacl) &#123;</div><div class="line">      deps += [ &quot;//native_client_sdk/src/libraries/nacl_io&quot; ]</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  # (Baidu Modified End)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3><span id="收益点">收益点</span></h3><ul>
+<li><p>提供了CroNet缺失部分代码情况下编译出完整功能的能力，解决了代码开源的关键问题。</p>
+</li>
+<li><p>做到了对用户透明，开关化灵活控制。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kkrisen.top/post/9ef298c6/" data-id="cjbayuugh000f9q9kip1269o7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/post/4ed07732/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          C++静态库符号冲突解决方案
+        
+      </div>
+    </a>
+  
+  
+    <a href="/post/2cad0b6d/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">iOS webview 网络请求代理调研</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Arkiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Siste innlegg</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/post/fcf2134a/">移动端前后台状态通知机制实现</a>
+          </li>
+        
+          <li>
+            <a href="/post/4ed07732/">C++静态库符号冲突解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/post/9ef298c6/">项目开源解决方案</a>
+          </li>
+        
+          <li>
+            <a href="/post/2cad0b6d/">iOS webview 网络请求代理调研</a>
+          </li>
+        
+          <li>
+            <a href="/post/d433ace1/">iOS版本导致NSURLSession表现不一致问题调研</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Krisen Tan<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
