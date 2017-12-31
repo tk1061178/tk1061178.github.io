@@ -78,10 +78,8 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://kkrisen.top/blog/ef0c76f5/cronet-httpcache.jpg">
 <meta property="og:image" content="http://kkrisen.top/blog/ef0c76f5/cronet-rfc.jpg">
-<meta property="og:image" content="https://www.rfc-editor.org/rfc/pdfrfc/rfc7234.txt.pdf">
 <meta property="og:image" content="http://kkrisen.top/blog/ef0c76f5/cronet-chromium-discuss.jpg">
-<meta property="og:image" content="https://bugs.chromium.org/p/chromium/issues/detail?id=513164">
-<meta property="og:updated_time" content="2017-12-31T07:47:47.000Z">
+<meta property="og:updated_time" content="2017-12-31T07:57:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cronet-httpCache基本逻辑">
 <meta name="twitter:description" content="背景对Cronet中如何做http cache做了一个梳理解析.">
@@ -316,9 +314,9 @@
 <p>因此，cronet本身实际上把identifier关闭了（置0），使得所有依赖该值的功能都是失效的，包括post请求使用httpcache</p>
 <h4><span id="佐证材料">佐证材料</span></h4><p>先找一个相关的资料</p>
 <ul>
-<li><p>http协议文档<br><img src="/blog/ef0c76f5/cronet-rfc.jpg" alt="RFC"><br>来自<img src="https://www.rfc-editor.org/rfc/pdfrfc/rfc7234.txt.pdf" alt="rfc7234"></p>
+<li><p>http协议文档<br><img src="/blog/ef0c76f5/cronet-rfc.jpg" alt="RFC"><br>来自<a href="https://www.rfc-editor.org/rfc/pdfrfc/rfc7234.txt.pdf" target="_blank" rel="external">rfc7234</a></p>
 </li>
-<li><p>chromium-discuss资料<br><img src="/blog/ef0c76f5/cronet-chromium-discuss.jpg" alt="chromium-discuss"><br><img src="https://bugs.chromium.org/p/chromium/issues/detail?id=513164" alt="chromium-discuss"></p>
+<li><p>chromium-discuss资料<br><img src="/blog/ef0c76f5/cronet-chromium-discuss.jpg" alt="chromium-discuss"><br><a href="https://bugs.chromium.org/p/chromium/issues/detail?id=513164" target="_blank" rel="external">chromium-discuss</a></p>
 </li>
 </ul>
 <p>由http协议对httpcache的介绍来看，协议层是没有对使用httpcache的方法类型做限制的。</p>
