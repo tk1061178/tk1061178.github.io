@@ -69,19 +69,17 @@
 
 
 
-<meta name="description" content="问题描述iOS8.1系统上，使用Cronet测试网络请求，请求未能使用经过Cronet发送，仍使用iOS自身系统网络库。在iOS 9及以上系统未出现这个问题。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="iOS版本导致NSURLSession表现不一致问题调研">
-<meta property="og:url" content="http://kkrisen.top/blog/d433ace1/index.html">
+<meta name="description" content="About Me Enginner in Baidu. Optimistic and enjoy challenge. Believe in technology, believe in changing the world.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="About">
+<meta property="og:url" content="http://kkrisen.top/about/index.html">
 <meta property="og:site_name" content="Tkooops">
-<meta property="og:description" content="问题描述iOS8.1系统上，使用Cronet测试网络请求，请求未能使用经过Cronet发送，仍使用iOS自身系统网络库。在iOS 9及以上系统未出现这个问题。">
+<meta property="og:description" content="About Me Enginner in Baidu. Optimistic and enjoy challenge. Believe in technology, believe in changing the world.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://kkrisen.top/blog/d433ace1/iOS_consist.png">
-<meta property="og:updated_time" content="2017-12-15T01:52:09.000Z">
+<meta property="og:updated_time" content="2017-12-31T07:11:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS版本导致NSURLSession表现不一致问题调研">
-<meta name="twitter:description" content="问题描述iOS8.1系统上，使用Cronet测试网络请求，请求未能使用经过Cronet发送，仍使用iOS自身系统网络库。在iOS 9及以上系统未出现这个问题。">
-<meta name="twitter:image" content="http://kkrisen.top/blog/d433ace1/iOS_consist.png">
+<meta name="twitter:title" content="About">
+<meta name="twitter:description" content="About Me Enginner in Baidu. Optimistic and enjoy challenge. Believe in technology, believe in changing the world.">
 
 
 
@@ -111,13 +109,13 @@
 
 
 
-  <link rel="canonical" href="http://kkrisen.top/blog/d433ace1/"/>
+  <link rel="canonical" href="http://kkrisen.top/about/"/>
 
 
 
 
 
-  <title>iOS版本导致NSURLSession表现不一致问题调研 | Tkooops</title>
+  <title>About | Tkooops</title>
   
 
 
@@ -222,171 +220,38 @@
 
   <div id="posts" class="posts-expand">
     
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://kkrisen.top/blog/d433ace1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Krisen Tan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tkooops">
-    </span>
-
     
+    
+    <div class="post-block page">
       <header class="post-header">
 
-        
-        
-          <h1 class="post-title" itemprop="name headline">iOS版本导致NSURLSession表现不一致问题调研</h1>
-        
+	<h1 class="post-title" itemprop="name headline">About</h1>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-09T10:18:45+08:00">
-                2017-10-09
-              </time>
-            
 
-            
 
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+</header>
 
       
       
-
       
-        <h3><span id="问题描述">问题描述</span></h3><p>iOS8.1系统上，使用Cronet测试网络请求，请求未能使用经过Cronet发送，仍使用iOS自身系统网络库。在iOS 9及以上系统未出现这个问题。</p>
-<a id="more"></a>
-<p>在iOS上，Cronet是这样代理网络请求的。<br>我们注册了自定义的NSURLProtocol类来拦截NSURLSession请求，注册流程可以分为这些步骤：</p>
-<ol>
-<li><p>sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration]初始化一个默认的NSURLSessionConfiguration。</p>
-</li>
-<li><p>[Cronet registerNSURLSessionConfiguration:sessionConfig]将CroNet自定义的NSURLProtocol class加入到sessionConfig中。<br>使用sessionConfig初始化一个NSURLSession，之后发请求使用NSURLSession即可。</p>
-</li>
-<li><p>CroNet还提供unregisterNSURLSessionConfiguration:(NSURLSessionConfiguration*)方法，可以将参数SessionConfig中的自定义protocol抹除，恢复成系统默认SessionConfig。我们期待的效果是，只要调用了该方法，网络请求就开始走系统默认路径而不是CroNet。</p>
-</li>
-</ol>
-<p>在我们的测试demo中，使用了一个全局的NSURLSession，启动时会start CroNet，并将上述1、2步骤都执行好，此时执行普通的发送请求，会命中CroNet，结果符合预期。</p>
-<p>然后我执行了步骤3，unregister之后，网络请求又会回到系统网络库，此时依然符合预期。</p>
-<p>那么如果我如果再执行1、2，请求居然不会再命中CroNet了，此处不符合预期了。</p>
-<h3><span id="初步调研原因">初步调研原因</span></h3><p>经过打印内存地址，最终确定原因为：</p>
-<p>步骤1产生了一个新的defaultSessionConfiguration，这样导致sessionConfig已经不是步骤3中NSURLSession中引用的sessionConfig，使用新的sessionConfig进行步骤3并不会对NSURLSession中原本的sessionConfig产生影响，因此导致之后的请求依然走系统库，进不去CroNet。</p>
-<h3><span id="问题疑点">问题疑点</span></h3><p>问题其实还有个重要的问题没解释：<br>为啥问题在iOS9/10没有出现</p>
-<p>我们做了对照实验，唯一变量是系统版本，iOS8必现问题，iOS9/10没有问题，那必然是不同版本之间在一些系统级别的实现存在diff。这种diff会带来新的问题吗</p>
-<p>在参考了苹果官方文档后，确定了根本原因：<br><img src="/blog/d433ace1/iOS_consist.png" alt="iOS_consist"><br><a href="https://developer.apple.com/reference/foundation/nsurlsession/1411477-configuration?language=objc" target="_blank" rel="external">NSURLSession - Configuration by Apple documentation</a><br>参看苹果开发者文档的解释，从iOS9开始，苹果是把NSURLSessionConfiguration拷贝了一份放在NSURLSession中，而在iOS9以下只是一个引用。</p>
-<p>因此文档中也这么提醒了，在iOS9及以上，对于源sessionConfig的任何修改都不会影响到NSURLSession上，因此CroNet stop（会将源sessionConfig中的自定义NSURLProtocol remove掉）之后，NSURLSession不受影响，它依然认为自己应该将请求灌到CroNet中去，所以未察觉出问题。</p>
-<h3><span id="解决方案">解决方案</span></h3><p>解决方案</p>
-<ol>
-<li>高版本(iOS 9/10 及以上)的NSURLSession一经创建，就无法修改其SessionConfig，因此影响1目前无有效方法解决。只能声明在高版本中，如果要更换NSURLSession中的SessionConfig，需重新创建NSURLSession。</li>
-</ol>
-<ol>
-<li><p>修改代码， 在CroNet stop之后，使canInitWithRequest方法妥善处理灌入的请求：即CroNet running的时候会走CroNet，被stop后，返回false并走系统网络库。</p>
-</li>
-<li><p>在CroNet stop后把unregisterAllNSURLSessionConfiguration步骤去掉，这样在stop后各个版本还是均尝试是否走CroNet，由于在上面2中对canInitWithRequest进行了修复，因此不会对业务造成影响。</p>
-</li>
-</ol>
+      <div class="post-body">
+        
+        
+          <h3><span id="about-me">About Me</span></h3><ul>
+<li>Enginner in Baidu.</li>
+<li>Optimistic and enjoy challenge.</li>
+<li>Believe in technology, believe in changing the world.</li>
+</ul>
 
+        
+      </div>
+      
+      
       
     </div>
     
     
     
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/blog/55e96897/" rel="next" title="使用mqtt协议实现iOS端心跳探活">
-                <i class="fa fa-chevron-left"></i> 使用mqtt协议实现iOS端心跳探活
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2cad0b6d/" rel="prev" title="iOS webview 网络请求代理调研">
-                iOS webview 网络请求代理调研 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
@@ -508,7 +373,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">初步调研原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">问题疑点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">解决方案</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">About Me</span></a></li></ol></div>
             
 
           </div>
