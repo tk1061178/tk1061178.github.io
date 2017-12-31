@@ -69,19 +69,19 @@
 
 
 
-<meta name="description" content="背景为了支持端上网络库内部组件获取App状态，以便使用合适的策略，例如如果当前App在后台，网络库便不再去主动解析DNS结果，这样可以节省对移动端设备的资源消耗。因此项目需要做一个移动端前后台状态判断及通知机制。由于我们支持iOS和Android，因此这个特性也分别针对双端做，上层用一个抽象类封装。 概要设计 初始化：网络库启动时，会初始化Notifier实例，但会根据不同的端实例化不同的子类。N">
+<meta name="description" content="背景为了支持端上网络库内部组件获取App状态，以便使用合适的策略，例如如果当前App在后台，网络库便不再去主动解析DNS结果，这样可以节省对移动端设备的资源消耗。因此项目需要做一个移动端前后台状态判断及通知机制。由于我们支持iOS和Android，因此这个特性也分别针对双端做，上层用一个抽象类封装。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="移动端前后台状态通知机制实现">
 <meta property="og:url" content="http://kkrisen.top/blog/fcf2134a/index.html">
 <meta property="og:site_name" content="Tkooops">
-<meta property="og:description" content="背景为了支持端上网络库内部组件获取App状态，以便使用合适的策略，例如如果当前App在后台，网络库便不再去主动解析DNS结果，这样可以节省对移动端设备的资源消耗。因此项目需要做一个移动端前后台状态判断及通知机制。由于我们支持iOS和Android，因此这个特性也分别针对双端做，上层用一个抽象类封装。 概要设计 初始化：网络库启动时，会初始化Notifier实例，但会根据不同的端实例化不同的子类。N">
+<meta property="og:description" content="背景为了支持端上网络库内部组件获取App状态，以便使用合适的策略，例如如果当前App在后台，网络库便不再去主动解析DNS结果，这样可以节省对移动端设备的资源消耗。因此项目需要做一个移动端前后台状态判断及通知机制。由于我们支持iOS和Android，因此这个特性也分别针对双端做，上层用一个抽象类封装。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://kkrisen.top/blog/fcf2134a/new_front_back.png">
 <meta property="og:image" content="http://kkrisen.top/blog/fcf2134a/new_front_back_thread.png">
-<meta property="og:updated_time" content="2017-12-15T01:52:09.000Z">
+<meta property="og:updated_time" content="2017-12-31T07:29:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="移动端前后台状态通知机制实现">
-<meta name="twitter:description" content="背景为了支持端上网络库内部组件获取App状态，以便使用合适的策略，例如如果当前App在后台，网络库便不再去主动解析DNS结果，这样可以节省对移动端设备的资源消耗。因此项目需要做一个移动端前后台状态判断及通知机制。由于我们支持iOS和Android，因此这个特性也分别针对双端做，上层用一个抽象类封装。 概要设计 初始化：网络库启动时，会初始化Notifier实例，但会根据不同的端实例化不同的子类。N">
+<meta name="twitter:description" content="背景为了支持端上网络库内部组件获取App状态，以便使用合适的策略，例如如果当前App在后台，网络库便不再去主动解析DNS结果，这样可以节省对移动端设备的资源消耗。因此项目需要做一个移动端前后台状态判断及通知机制。由于我们支持iOS和Android，因此这个特性也分别针对双端做，上层用一个抽象类封装。">
 <meta name="twitter:image" content="http://kkrisen.top/blog/fcf2134a/new_front_back.png">
 
 
@@ -302,12 +302,11 @@
       
 
       
-        <h3><span id="背景">背景</span></h3><p>为了支持端上网络库内部组件获取App状态，以便使用合适的策略，例如如果当前App在后台，网络库便不再去主动解析DNS结果，这样可以节省对移动端设备的资源消耗。<br>因此项目需要做一个移动端前后台状态判断及通知机制。由于我们支持iOS和Android，因此这个特性也分别针对双端做，上层用一个抽象类封装。</p>
+        <h3><span id="背景">背景</span></h3><p>为了支持端上网络库内部组件获取App状态，以便使用合适的策略，例如如果当前App在后台，网络库便不再去主动解析DNS结果，这样可以节省对移动端设备的资源消耗。<br>因此项目需要做一个移动端前后台状态判断及通知机制。由于我们支持iOS和Android，因此这个特性也分别针对双端做，上层用一个抽象类封装。<br><a id="more"></a></p>
 <h3><span id="概要设计">概要设计</span></h3><ol>
 <li>初始化：网络库启动时，会初始化Notifier实例，但会根据不同的端实例化不同的子类。Notifier用于探测当前App状态并通过回调方式通知下游用户。</li>
 <li>用户注册：我们提供了标准的用户回调抽象类，下游用户通过继承并实现具体的抽象方法生成新的实例，并将该实例注册进Notifier。</li>
-<li>在状态发生变更时，Notifier会轮询一遍所有等待回调的用户（第2步注册进来的）触发用户自定义动作。<a id="more"></a>
-</li>
+<li>在状态发生变更时，Notifier会轮询一遍所有等待回调的用户（第2步注册进来的）触发用户自定义动作。</li>
 </ol>
 <p>逻辑架构图<br><img src="/blog/fcf2134a/new_front_back.png" width="70%" height="70%"></p>
 <p>运行架构图(以Android为例)<br><img src="/blog/fcf2134a/new_front_back_thread.png" alt="new_front_back_thread"></p>

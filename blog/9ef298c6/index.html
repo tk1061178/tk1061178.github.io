@@ -69,17 +69,17 @@
 
 
 
-<meta name="description" content="背景计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。 因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。 解决思路编译本质上是将代码翻译成机器可执行的二进制，因此在没有代码的情况下，直接提供二进制参与链接理论上是可行的。 因此该问题的解决思路是，将boringssl代">
+<meta name="description" content="背景计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="项目开源解决方案">
 <meta property="og:url" content="http://kkrisen.top/blog/9ef298c6/index.html">
 <meta property="og:site_name" content="Tkooops">
-<meta property="og:description" content="背景计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。 因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。 解决思路编译本质上是将代码翻译成机器可执行的二进制，因此在没有代码的情况下，直接提供二进制参与链接理论上是可行的。 因此该问题的解决思路是，将boringssl代">
+<meta property="og:description" content="背景计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-15T01:52:09.000Z">
+<meta property="og:updated_time" content="2017-12-31T07:33:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="项目开源解决方案">
-<meta name="twitter:description" content="背景计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。 因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。 解决思路编译本质上是将代码翻译成机器可执行的二进制，因此在没有代码的情况下，直接提供二进制参与链接理论上是可行的。 因此该问题的解决思路是，将boringssl代">
+<meta name="twitter:description" content="背景计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。">
 
 
 
@@ -299,10 +299,9 @@
       
 
       
-        <h3><span id="背景">背景</span></h3><p>计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。</p>
-<p>因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。</p>
+        <h3><span id="背景">背景</span></h3><p>计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。<br>因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。<br><a id="more"></a></p>
 <h3><span id="解决思路">解决思路</span></h3><p>编译本质上是将代码翻译成机器可执行的二进制，因此在没有代码的情况下，直接提供二进制参与链接理论上是可行的。</p>
-<p>因此该问题的解决思路是，将boringssl代码编译打包成libboringssl.a静态库，随代码库发布，用户使用时直接将libboringssl.a当做基础lib库。<br><a id="more"></a></p>
+<p>因此该问题的解决思路是，将boringssl代码编译打包成libboringssl.a静态库，随代码库发布，用户使用时直接将libboringssl.a当做基础lib库。</p>
 <h3><span id="技术难点">技术难点</span></h3><p>这里的技术难点主要是如何将libboringssl.a库以恰当的方式链接进最终产物。</p>
 <p>在这之前，我们可以先产出一个不包含libboringssl.a的最终产物，做法是把boringssl的.cc代码都移除，只保留include头文件，再调整一下编译配置即可。</p>
 <p>而最终如何发生链接的可行方案如下：</p>

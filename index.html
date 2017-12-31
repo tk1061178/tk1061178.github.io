@@ -429,11 +429,7 @@
 
       
         
-          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>为了支持端上网络库内部组件获取App状态，以便使用合适的策略，例如如果当前App在后台，网络库便不再去主动解析DNS结果，这样可以节省对移动端设备的资源消耗。<br>因此项目需要做一个移动端前后台状态判断及通知机制。由于我们支持iOS和Android，因此这个特性也分别针对双端做，上层用一个抽象类封装。</p>
-<h3 id="概要设计"><a href="#概要设计" class="headerlink" title="概要设计"></a>概要设计</h3><ol>
-<li>初始化：网络库启动时，会初始化Notifier实例，但会根据不同的端实例化不同的子类。Notifier用于探测当前App状态并通过回调方式通知下游用户。</li>
-<li>用户注册：我们提供了标准的用户回调抽象类，下游用户通过继承并实现具体的抽象方法生成新的实例，并将该实例注册进Notifier。</li>
-<li>在状态发生变更时，Notifier会轮询一遍所有等待回调的用户（第2步注册进来的）触发用户自定义动作。</li></ol>
+          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>为了支持端上网络库内部组件获取App状态，以便使用合适的策略，例如如果当前App在后台，网络库便不再去主动解析DNS结果，这样可以节省对移动端设备的资源消耗。<br>因此项目需要做一个移动端前后台状态判断及通知机制。由于我们支持iOS和Android，因此这个特性也分别针对双端做，上层用一个抽象类封装。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/fcf2134a/#more" rel="contents">
@@ -557,10 +553,7 @@
 
       
         
-          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>Cronet准备接入公司一个产品的iOS版本，由于需要兼容iOS7.0，所有sdk需提供静态库版本。</p>
-<p>静态库包含了整个代码里所有全局可见的函数、变量，这些在编译后都是以符号的方式存在于xxx.a中，由于跟APP工程共用了一些相同的第三方库，造成在链接过程报duplicated symbols error错误。</p>
-<p>而更为严重的一点是，在iOS的xcode进行链接时，它会自己替你解决一些符合冲突，解决的方式是按链接顺序，假设libA先链接，那么这些冲突符号就是按libA的定义来运行。</p>
-<p>在我们集成过程中，问题最大的是已有的openssl 与我们的 boringssl库的冲突，由于boringssl做了许多定制化的修改，我们目前只能想办法让两个库共存，并且运行互不干扰。<br></p>
+          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>Cronet准备接入公司一个产品的iOS版本，由于需要兼容iOS7.0，所有sdk需提供静态库版本。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/4ed07732/#more" rel="contents">
@@ -684,10 +677,7 @@
 
       
         
-          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。</p>
-<p>因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。</p>
-<h3 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h3><p>编译本质上是将代码翻译成机器可执行的二进制，因此在没有代码的情况下，直接提供二进制参与链接理论上是可行的。</p>
-<p>因此该问题的解决思路是，将boringssl代码编译打包成libboringssl.a静态库，随代码库发布，用户使用时直接将libboringssl.a当做基础lib库。<br></p>
+          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>计划将改进后的CroNet单独开源给用户，让用户也能编译及调试，但部分代码不能开源（目前主要是包含加密算法的boringssl代码）。<br>因此，需要有一个开源方案，使得用户仅获取部分代码，但依然可以编译出包含完整功能的CroNet库。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/9ef298c6/#more" rel="contents">
@@ -811,8 +801,7 @@
 
       
         
-          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在iOS中，除了普通请求（NSURLSession、NSURLConnection）以外，还有一种webview的请求，这是iOS的一种UI组件，可直接调用其loadRequest方法，发起请求，webview会把response以html的形式加载到其界面上。</p>
-<p>我们主要对于常用的UIWebview、WKWebview的网络请求尝试使用Cronet进行代理进行了调研分析。<br></p>
+          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在iOS中，除了普通请求（NSURLSession、NSURLConnection）以外，还有一种webview的请求，这是iOS的一种UI组件，可直接调用其loadRequest方法，发起请求，webview会把response以html的形式加载到其界面上。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/2cad0b6d/#more" rel="contents">
@@ -1060,12 +1049,7 @@
 
       
         
-          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。</p>
-<p>我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。</p>
-<h3 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h3><p>移动端监测与服务器监测最大的不同，应该在于移动端设备所处的网络环境是复杂多变的，而我们的心跳探活目的是确认端设备本身是否正常。</p>
-<p>因此在选择端设备与服务端的通信协议时，要求对网络依赖小且在比如弱网环境下依然稳定工作，这样才能避免网络环境不稳定造成的干扰，避免一些误判。</p>
-<p>Mqtt (Message Queue Telemetry Transport)协议是一种应用层协议，适用于资源受限例如低带宽、高延迟网络环境下的端到端通信。这种适用性主要是来自于它在包大小的精简以及对push消息场景的一些优化。</p>
-<p>因此最终选用的mqtt协议作为心跳探活的通信协议，mqtt的对比介绍还可参见：<a href="https://blogs.vmware.com/vfabric/2013/02/choosing-your-messaging-protocol-amqp-mqtt-or-stomp.html" target="_blank" rel="external">Choosing Your Messaging Protocol: AMQP, MQTT, or STOMP</a></p>
+          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。<br>我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/55e96897/#more" rel="contents">
@@ -1189,18 +1173,7 @@
 
       
         
-          <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>项目组基于Cronet自研的产品每次对外发布对应一个版本号，在此之前版本号都是手动由Release Engineer进行填写，并在代码中用到了版本号的地方进行相应修改。</p>
-<p><strong>现状</strong><br>版本号分为4位，前两位对应一次发布，第三位为patch（从1开始），第四位没有作用，默认为1。例如1.5.2.1，即表示我们2016.12月份发布的1.5版本，其中进行了一次patch,因此第三位为2。</p>
-<p>版本号由Release Engineer在组内确认完后，由于目前部分模块均在代码中写死了版本号，需要去手动调整后再commit一次，才能发布。</p>
-<p>总之，这块存在两个问题。</p>
-<ol>
-<li>我们对四位版本号的使用不合理，实际上只用到了其中三位。</li>
-<li>每次发布时，为了版本号需要人工去调整代码，这显然是很难忍受的。</li>
-</ol>
-<p><strong>目标</strong><br>为了提高效率，我们将现状和需求分析了下，分为两个具体要做的事:</p>
-<ul>
-<li>提供统一的版本号配置管理，只需修改版本号配置，便可应用到整个代码库。</li>
-<li>尽量将版本号做成自动化无需人工干预的。</li></ul>
+          <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>项目组基于Cronet自研的产品每次对外发布对应一个版本号，在此之前版本号都是手动由Release Engineer进行填写，并在代码中用到了版本号的地方进行相应修改。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/b0143e26/#more" rel="contents">
@@ -1325,7 +1298,7 @@
       
         
           <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>由于公司产品需求，需要在iOS编译发布中支持静态库包，而我们默认的编译发布是动态库，chromium官方也是只支持动态库。</p>
-<p>这个目标实际就是能使用ninja命令配合一定的编译参数就可以编译出静态库+在发布时能将静态产物抛给Agile。这里面预计设计两方面的改动：第一个就是我们的库代码，第二个是编译server。</p>
+<p>这个目标实际就是能使用ninja命令配合一定的编译参数就可以编译出静态库+在发布时能将静态产物抛给Agile。这里面预计设计两方面的改动：第一个就是我们的库代码，第二个是编译server。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/43e8541c/#more" rel="contents">

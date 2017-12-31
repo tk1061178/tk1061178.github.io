@@ -302,8 +302,7 @@
 
       
         
-          <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>这里分享一个python写的分离特定的git修改的方法。<br>主要应用的问题是当时项目组需要同步chromium最新代码，结果带来了巨大量的改动，为了节省我们review新代码的时间，需要将一些不重要的修改（携带某种特征，例如新版本的chromium大量替换了智能指针，将自研的scoped_ptr变成了std::unique_ptr）分离出来，剩下的就是重要的修改了。</p>
-<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>这里主要用到python的unidiff库，这个库可以解析出标准的unified diff data，git diff恰好就是这个格式。<br></p>
+          <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>这里分享一个python写的分离特定的git修改的方法。<br>主要应用的问题是当时项目组需要同步chromium最新代码，结果带来了巨大量的改动，为了节省我们review新代码的时间，需要将一些不重要的修改（携带某种特征，例如新版本的chromium大量替换了智能指针，将自研的scoped_ptr变成了std::unique_ptr）分离出来，剩下的就是重要的修改了。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/27683891/#more" rel="contents">
@@ -427,9 +426,7 @@
 
       
         
-          <h4 id="简单介绍一下gcov和lcov"><a href="#简单介绍一下gcov和lcov" class="headerlink" title="简单介绍一下gcov和lcov"></a>简单介绍一下gcov和lcov</h4><p>gcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用<br>在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能<br>在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。<br>对可执行文件进行一次运行，即可得到.gcda文件<br>最终，用gcov工具对源代码进行处理，得到.gcov文件，即为我们需要的覆盖信息的初试状态</p>
-<p>因为gcov生成的是纯文字，不好直观展现，lcov工具就是在gcov的基础上，生成html做了界面化展现。</p>
-<p>我们准备在chromium项目(Cronet)中新增gcov单测覆盖率<br>chromium使用的是Google自研的gn &amp; ninja，前者gn是用于生成类似Makefile的编译文件，后者进行真正的编译，产出对象文件<br>关于chromium的编译可以参考官方文档：<a href="https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md" target="_blank" rel="external">https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md</a><br></p>
+          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>gcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/67201122/#more" rel="contents">
@@ -553,7 +550,7 @@
 
       
         
-          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>对Cronet中如何做http cache做了一个梳理解析.<br>先介绍一下Cronet网络库的启动流程<br><img src="cronet-httpcache.jpg" alt="Cronet-httpcache"><br>以Android举例，如上图，Cronet是一个单线程网络库，在java层存在唯一的CronetEngine，在C++层存在唯一的URLRequestContext，它们是网络库最核心的上下文。<br></p>
+          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>对Cronet中如何做http cache做了一个梳理解析.<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/ef0c76f5/#more" rel="contents">
@@ -803,16 +800,7 @@
         
           <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>Cronet是chromium的网络协议栈，具有如下特点。</p>
 <ul>
-<li><p>提供了从传输层到应用层的完整网络库功能。</p>
-</li>
-<li><p>极佳的跨平台性，覆盖所有主流操作系统：iOS, Android, linux, macOS, win。</p>
-</li>
-<li><p>除了应用层由于支持跨平台，使用了不同语言封装（java | objective-C），底层共用一套C++代码，性能很高。</p>
-</li>
-<li><p>提供多种协议支持:http/spdy/quic等。</p>
-</li>
-</ul>
-<p>最重要的是，这个项目Google开源出来了。<br>其中，http协议常用的请求方式为使用URLRequest，本章用于记录对URLRequest代码的学习分析。<br></p>
+<li>提供了从传输层到应用层的完整网络库功能。</li></ul>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/292fdeb9/#more" rel="contents">
@@ -936,10 +924,7 @@
 
       
         
-          <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>twemproxy是twitter开源出来的一款用于存储集群的反向代理。常见于Redis集群，加入了twemproxy的Redis集群其请求流程可以简化为：用户-&gt;twemproxy-&gt;Redis，用户只需要与twemproxy建立连接并发送请求，twemproxy通过配置在自身的路由表及均衡策略，将请求转发至相应后端。</p>
-<p>本章主要记录一下实习时做的一个twemproxy批量部署脚本，其目的是节省运维人力，提升新建Redis集群速度。</p>
-<h2 id="一些前提"><a href="#一些前提" class="headerlink" title="一些前提"></a>一些前提</h2><p>公司内的Redis集群并不是使用的纯开源的，而是基于开源代码自研的，其中就包括Redis中控（类似于开源里的sentinel）。</p>
-<p>另外有个用于集群管理的paas平台，在使用该脚本进行部署前，已经通过平台将Redis及twemproxy配置写入了Redis中控。主要的信息包括待部署的机器ip、端口、实例路由表（Redis）<br></p>
+          <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>twemproxy是twitter开源出来的一款用于存储集群的反向代理。常见于Redis集群，加入了twemproxy的Redis集群其请求流程可以简化为：用户-&gt;twemproxy-&gt;Redis，用户只需要与twemproxy建立连接并发送请求，twemproxy通过配置在自身的路由表及均衡策略，将请求转发至相应后端。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/dfbcdc9a/#more" rel="contents">
@@ -1063,8 +1048,7 @@
 
       
         
-          <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>Redis是一个内存型KV存储，以其高性能特性得到广泛应用。作为数据库，主从同步一直是一个非常核心的功能。其主从同步是基于最终一致性。</p>
-<p>本章主要是主从同步相关流程和代码的分析，内容写于2015年基于Redis 2.6版本。<br></p>
+          <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>Redis是一个内存型KV存储，以其高性能特性得到广泛应用。作为数据库，主从同步一直是一个非常核心的功能。其主从同步是基于最终一致性。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blog/bb98e323/#more" rel="contents">

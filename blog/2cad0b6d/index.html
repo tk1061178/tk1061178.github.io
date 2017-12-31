@@ -69,20 +69,20 @@
 
 
 
-<meta name="description" content="背景在iOS中，除了普通请求（NSURLSession、NSURLConnection）以外，还有一种webview的请求，这是iOS的一种UI组件，可直接调用其loadRequest方法，发起请求，webview会把response以html的形式加载到其界面上。 我们主要对于常用的UIWebview、WKWebview的网络请求尝试使用Cronet进行代理进行了调研分析。">
+<meta name="description" content="背景在iOS中，除了普通请求（NSURLSession、NSURLConnection）以外，还有一种webview的请求，这是iOS的一种UI组件，可直接调用其loadRequest方法，发起请求，webview会把response以html的形式加载到其界面上。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS webview 网络请求代理调研">
 <meta property="og:url" content="http://kkrisen.top/blog/2cad0b6d/index.html">
 <meta property="og:site_name" content="Tkooops">
-<meta property="og:description" content="背景在iOS中，除了普通请求（NSURLSession、NSURLConnection）以外，还有一种webview的请求，这是iOS的一种UI组件，可直接调用其loadRequest方法，发起请求，webview会把response以html的形式加载到其界面上。 我们主要对于常用的UIWebview、WKWebview的网络请求尝试使用Cronet进行代理进行了调研分析。">
+<meta property="og:description" content="背景在iOS中，除了普通请求（NSURLSession、NSURLConnection）以外，还有一种webview的请求，这是iOS的一种UI组件，可直接调用其loadRequest方法，发起请求，webview会把response以html的形式加载到其界面上。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://kkrisen.top/blog/2cad0b6d/wkwebview-codes.png">
 <meta property="og:image" content="http://kkrisen.top/blog/2cad0b6d/wkwebview-demo.png">
 <meta property="og:image" content="http://kkrisen.top/blog/2cad0b6d/wkwebview-danger.png">
-<meta property="og:updated_time" content="2017-12-15T01:52:09.000Z">
+<meta property="og:updated_time" content="2017-12-31T07:34:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS webview 网络请求代理调研">
-<meta name="twitter:description" content="背景在iOS中，除了普通请求（NSURLSession、NSURLConnection）以外，还有一种webview的请求，这是iOS的一种UI组件，可直接调用其loadRequest方法，发起请求，webview会把response以html的形式加载到其界面上。 我们主要对于常用的UIWebview、WKWebview的网络请求尝试使用Cronet进行代理进行了调研分析。">
+<meta name="twitter:description" content="背景在iOS中，除了普通请求（NSURLSession、NSURLConnection）以外，还有一种webview的请求，这是iOS的一种UI组件，可直接调用其loadRequest方法，发起请求，webview会把response以html的形式加载到其界面上。">
 <meta name="twitter:image" content="http://kkrisen.top/blog/2cad0b6d/wkwebview-codes.png">
 
 
@@ -303,8 +303,7 @@
       
 
       
-        <h3><span id="背景">背景</span></h3><p>在iOS中，除了普通请求（NSURLSession、NSURLConnection）以外，还有一种webview的请求，这是iOS的一种UI组件，可直接调用其loadRequest方法，发起请求，webview会把response以html的形式加载到其界面上。</p>
-<p>我们主要对于常用的UIWebview、WKWebview的网络请求尝试使用Cronet进行代理进行了调研分析。<br><a id="more"></a></p>
+        <h3><span id="背景">背景</span></h3><p>在iOS中，除了普通请求（NSURLSession、NSURLConnection）以外，还有一种webview的请求，这是iOS的一种UI组件，可直接调用其loadRequest方法，发起请求，webview会把response以html的形式加载到其界面上。<br><a id="more"></a><br>我们主要对于常用的UIWebview、WKWebview的网络请求尝试使用Cronet进行代理进行了调研分析。</p>
 <h3><span id="问题及解决方案">问题及解决方案</span></h3><p><strong>UIWebview</strong><br>发现问题：<br>Response无法手动获取，这个应该是webview的一个通病，即没发通过回调等方式获取到字符串形式的response header 及 response。</p>
 <p>解决办法：<br>这里有个帖子使用UIWebview的回调方式拿到response，<br><a href="https://stackoverflow.com/questions/22325818/get-uiwebview-response-header" target="_blank" rel="external">stackoverflow-uiwebview</a></p>
 <p>但我测试无效，通过NSCachedURLResponse *resp = [[NSURLCache sharedURLCache] cachedResponseForRequest:webView.request];获取的总是null。</p>

@@ -69,19 +69,19 @@
 
 
 
-<meta name="description" content="背景介绍Redis是一个内存型KV存储，以其高性能特性得到广泛应用。作为数据库，主从同步一直是一个非常核心的功能。其主从同步是基于最终一致性。 本章主要是主从同步相关流程和代码的分析，内容写于2015年基于Redis 2.6版本。">
+<meta name="description" content="背景介绍Redis是一个内存型KV存储，以其高性能特性得到广泛应用。作为数据库，主从同步一直是一个非常核心的功能。其主从同步是基于最终一致性。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis-sync">
 <meta property="og:url" content="http://kkrisen.top/blog/bb98e323/index.html">
 <meta property="og:site_name" content="Tkooops">
-<meta property="og:description" content="背景介绍Redis是一个内存型KV存储，以其高性能特性得到广泛应用。作为数据库，主从同步一直是一个非常核心的功能。其主从同步是基于最终一致性。 本章主要是主从同步相关流程和代码的分析，内容写于2015年基于Redis 2.6版本。">
+<meta property="og:description" content="背景介绍Redis是一个内存型KV存储，以其高性能特性得到广泛应用。作为数据库，主从同步一直是一个非常核心的功能。其主从同步是基于最终一致性。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://kkrisen.top/blog/bb98e323/Redis-master-sync.jpg">
 <meta property="og:image" content="http://kkrisen.top/blog/bb98e323/Redis-slave-sync.jpg">
-<meta property="og:updated_time" content="2017-12-15T01:52:09.000Z">
+<meta property="og:updated_time" content="2017-12-31T07:50:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis-sync">
-<meta name="twitter:description" content="背景介绍Redis是一个内存型KV存储，以其高性能特性得到广泛应用。作为数据库，主从同步一直是一个非常核心的功能。其主从同步是基于最终一致性。 本章主要是主从同步相关流程和代码的分析，内容写于2015年基于Redis 2.6版本。">
+<meta name="twitter:description" content="背景介绍Redis是一个内存型KV存储，以其高性能特性得到广泛应用。作为数据库，主从同步一直是一个非常核心的功能。其主从同步是基于最终一致性。">
 <meta name="twitter:image" content="http://kkrisen.top/blog/bb98e323/Redis-master-sync.jpg">
 
 
@@ -302,8 +302,7 @@
       
 
       
-        <h2><span id="背景介绍">背景介绍</span></h2><p>Redis是一个内存型KV存储，以其高性能特性得到广泛应用。作为数据库，主从同步一直是一个非常核心的功能。其主从同步是基于最终一致性。</p>
-<p>本章主要是主从同步相关流程和代码的分析，内容写于2015年基于Redis 2.6版本。<br><a id="more"></a></p>
+        <h2><span id="背景介绍">背景介绍</span></h2><p>Redis是一个内存型KV存储，以其高性能特性得到广泛应用。作为数据库，主从同步一直是一个非常核心的功能。其主从同步是基于最终一致性。<br><a id="more"></a><br>本章主要是主从同步相关流程和代码的分析，内容写于2015年基于Redis 2.6版本。</p>
 <h2><span id="流程分析">流程分析</span></h2><h3><span id="主库视角">主库视角</span></h3><p><img src="/blog/bb98e323/Redis-master-sync.jpg" alt="Redis-master-sync"><br>站在Redis-Master视角，根据代码整理出了主从同步过程的函数调用关系。同步过程有两种可能的情况：</p>
 <ul>
 <li>主从同步：正常状态下的实时同步</li>

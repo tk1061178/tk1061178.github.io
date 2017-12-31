@@ -69,17 +69,17 @@
 
 
 
-<meta name="description" content="背景这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。 我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。 技术选型移动端监测与服务器监测最大的不同，应该在于移动端设备所处的网络环境是复杂多变的，而我们的心跳探活目的是确认端设备本身是">
+<meta name="description" content="背景这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用mqtt协议实现iOS端心跳探活">
 <meta property="og:url" content="http://kkrisen.top/blog/55e96897/index.html">
 <meta property="og:site_name" content="Tkooops">
-<meta property="og:description" content="背景这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。 我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。 技术选型移动端监测与服务器监测最大的不同，应该在于移动端设备所处的网络环境是复杂多变的，而我们的心跳探活目的是确认端设备本身是">
+<meta property="og:description" content="背景这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-15T01:52:09.000Z">
+<meta property="og:updated_time" content="2017-12-31T07:35:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用mqtt协议实现iOS端心跳探活">
-<meta name="twitter:description" content="背景这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。 我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。 技术选型移动端监测与服务器监测最大的不同，应该在于移动端设备所处的网络环境是复杂多变的，而我们的心跳探活目的是确认端设备本身是">
+<meta name="twitter:description" content="背景这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。">
 
 
 
@@ -299,13 +299,11 @@
       
 
       
-        <h3><span id="背景">背景</span></h3><p>这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。</p>
-<p>我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。</p>
+        <h3><span id="背景">背景</span></h3><p>这是AI稳定性建设项目的一个子项，目的是实现对iOS端设备的生命健康检查，技术方案是使用mqtt协议建立并维持iOS端设备与服务器的心跳，服务端对心跳数据建立监测机制。<br>我参与的主要是iOS端代码的开发，因此该文档主要为在iOS端使用mqtt协议发送心跳的调研和实践。<br><a id="more"></a></p>
 <h3><span id="技术选型">技术选型</span></h3><p>移动端监测与服务器监测最大的不同，应该在于移动端设备所处的网络环境是复杂多变的，而我们的心跳探活目的是确认端设备本身是否正常。</p>
 <p>因此在选择端设备与服务端的通信协议时，要求对网络依赖小且在比如弱网环境下依然稳定工作，这样才能避免网络环境不稳定造成的干扰，避免一些误判。</p>
 <p>Mqtt (Message Queue Telemetry Transport)协议是一种应用层协议，适用于资源受限例如低带宽、高延迟网络环境下的端到端通信。这种适用性主要是来自于它在包大小的精简以及对push消息场景的一些优化。</p>
 <p>因此最终选用的mqtt协议作为心跳探活的通信协议，mqtt的对比介绍还可参见：<a href="https://blogs.vmware.com/vfabric/2013/02/choosing-your-messaging-protocol-amqp-mqtt-or-stomp.html" target="_blank" rel="external">Choosing Your Messaging Protocol: AMQP, MQTT, or STOMP</a></p>
-<a id="more"></a>
 <h3><span id="方案设计">方案设计</span></h3><p>在mqtt协议中，一个主要的应用场景就是消息订阅及推送即pub/sub。基于pub/sub机制，我们就可以实现端到端的心跳传输：即一个端负责订阅某个topic的消息，另外一个端定时推送消息。</p>
 <p>那么在我们这种移动端-服务端的场景中，应该是谁来订阅，谁来推送呢？我们的目的是在服务端建立对移动端的健康监测，而消息推送（pub）是单向的，如果是移动端进行消息sub，服务端进行pub的话，那么移动端必须在收到消息后，再通过某个途径给服务端回一个ack。</p>
 <p>如果是移动端进行pub，服务端进行sub，那么仅需要移动端pub-&gt;mqtt-broker-&gt;服务端sub，即可完成一次完整的心跳探活。因此，我们最终选择使用移动端pub，服务端sub这种方案。</p>

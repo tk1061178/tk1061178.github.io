@@ -76,7 +76,7 @@
 <meta property="og:site_name" content="Tkooops">
 <meta property="og:description" content="背景由于公司产品需求，需要在iOS编译发布中支持静态库包，而我们默认的编译发布是动态库，chromium官方也是只支持动态库。 这个目标实际就是能使用ninja命令配合一定的编译参数就可以编译出静态库+在发布时能将静态产物抛给Agile。这里面预计设计两方面的改动：第一个就是我们的库代码，第二个是编译server。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-15T01:52:09.000Z">
+<meta property="og:updated_time" content="2017-12-31T07:39:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cronet静态库编译解决方案">
 <meta name="twitter:description" content="背景由于公司产品需求，需要在iOS编译发布中支持静态库包，而我们默认的编译发布是动态库，chromium官方也是只支持动态库。 这个目标实际就是能使用ninja命令配合一定的编译参数就可以编译出静态库+在发布时能将静态产物抛给Agile。这里面预计设计两方面的改动：第一个就是我们的库代码，第二个是编译server。">
@@ -300,14 +300,13 @@
 
       
         <h4><span id="背景">背景</span></h4><p>由于公司产品需求，需要在iOS编译发布中支持静态库包，而我们默认的编译发布是动态库，chromium官方也是只支持动态库。</p>
-<p>这个目标实际就是能使用ninja命令配合一定的编译参数就可以编译出静态库+在发布时能将静态产物抛给Agile。这里面预计设计两方面的改动：第一个就是我们的库代码，第二个是编译server。</p>
-<a id="more"></a>
+<p>这个目标实际就是能使用ninja命令配合一定的编译参数就可以编译出静态库+在发布时能将静态产物抛给Agile。这里面预计设计两方面的改动：第一个就是我们的库代码，第二个是编译server。<br><a id="more"></a></p>
 <h4><span id="解决方案">解决方案</span></h4><h5><span id="1调研静态库编译方案">1.调研静态库编译方案</span></h5><p>参考我们各个组件的编译方式（比如component(“net”)最终会编译出libnet.a），发现它们在产出目录中的.ninja文件中都是调用的alink（可参见build/toolchain/mac下tool(“alink”)）,那么研究了一下alink的实现，实际上是调用了python build/toolchain/mac/filter_libtool.py libtool -static xxx TurboNet.rsp，这样的命令来生成静态库的，前提是要存在.rsp(ninja -d keeprsp即可产生，里面记录了该组件中所有的.o文件)，那么大概也能猜出来执行这个命令，就是将.rsp中记录的.o文件全部打包最后生成.a。</p>
 <p>我们实测执行这条命令也是可以顺利产出静态库，所以最早我的想法就是在我们的编译体系中(.gn文件)插入这么个命令，在gn中有action()、exec_script()可以用于执行脚本。不过实验了一会儿，发现实在不太好控制，原因是action、exe_script默认都是在编译最开始就会进行执行，而我的需要其实是要等到该组件所有.o文件+.rsp文件都产出了，再执行脚本，这个时序非常难控制，最后不得已放弃了。由此也可以看出gn这套google搞出来的编译系统，想要个人做一些灵活的改动（比如编译时序的更改）还是比较困难的。</p>
 <p>然后注意到其实我们很多静态库都是使用static_library()这个gn中内置的工具来做的，因此把希望寄托在它身上，尝试了一下还是不行，原因在于static_library中只会把你定义为source的源文件给编译并打包成.a，所有的deps它完全不管，这不符合我们需求，我们想它能像shared_library一样将deps的东西也链接起来。</p>
 <p>找了一些例子发现无论是gn中的componets 还是 static_library，在产出目录的.ninja中都能发现最后都落到了alink上（这种衔接在gn文件中找不到，应该是gn内部做的转换），而且alink后面还确实接了所有需要的.o。而我写的static_library在alink里面就只有source的那几个文件，所以总感觉还是有些猫腻，应该是可以有办法通过static_library使得alink能找到所有的.o的。</p>
-<p>最后折腾了一番，在chromium论坛里找到了答案<a href="https://groups.google.com/a/chromium.org/forum/#!topic/gn-dev/PXidD24WtyE" target="_blank" rel="external">https://groups.google.com/a/chromium.org/forum/#!topic/gn-dev/PXidD24WtyE</a>（这个帖子就是我发的[捂脸表情]）<br>其实我们在static_library中加上complete_static_lib = true，即可编译出完整的静态库（包含所有deps）。</p>
-<p>说到这里，觉得像类似gn这种，也算是一个规模不小的工具了，其中有蛮多技巧，在chromium也由专门的代码区供gn的commit，但确实平时也没精力去深入研究，只能是靠问题驱动。<br>附gn帮助文档：<a href="https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/reference.md" target="_blank" rel="external">https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/reference.md</a>，内容其实蛮多的。<br>解决了关键问题后，为了兼容现有编译以及满足不同编译需求，还做了一些措施，包括</p>
+<p>最后折腾了一番，在chromium论坛里找到了答案<a href="https://groups.google.com/a/chromium.org/forum/#!topic/gn-dev/PXidD24WtyE" target="_blank" rel="external">chromium.org/forum</a>（这个帖子就是我发的[捂脸表情]）<br>其实我们在static_library中加上complete_static_lib = true，即可编译出完整的静态库（包含所有deps）。</p>
+<p>说到这里，觉得像类似gn这种，也算是一个规模不小的工具了，其中有蛮多技巧，在chromium也由专门的代码区供gn的commit，但确实平时也没精力去深入研究，只能是靠问题驱动。<br>附gn帮助文档：<a href="https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/reference.md" target="_blank" rel="external">gn/reference.md</a>，内容其实蛮多的。<br>解决了关键问题后，为了兼容现有编译以及满足不同编译需求，还做了一些措施，包括</p>
 <ul>
 <li><p>新增ios_release | debug.gn，编译server优先以该文件中的编译参数来进行编译。<br>新增了is_turbonet_static开关，只有为true的时候才会编译出静态库。</p>
 </li>

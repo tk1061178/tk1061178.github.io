@@ -69,17 +69,19 @@
 
 
 
-<meta name="description" content="简单介绍一下gcov和lcovgcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。对可执行文件进行一次运行，即可得到.gcda文件最终，用gcov工具对源代码进行处理，得到.gcov文件，即">
+<meta name="description" content="背景gcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在chromium项目中支持gcov单测覆盖率">
 <meta property="og:url" content="http://kkrisen.top/blog/67201122/index.html">
 <meta property="og:site_name" content="Tkooops">
-<meta property="og:description" content="简单介绍一下gcov和lcovgcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。对可执行文件进行一次运行，即可得到.gcda文件最终，用gcov工具对源代码进行处理，得到.gcov文件，即">
+<meta property="og:description" content="背景gcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-15T01:52:09.000Z">
+<meta property="og:image" content="https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md">
+<meta property="og:updated_time" content="2017-12-31T07:44:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在chromium项目中支持gcov单测覆盖率">
-<meta name="twitter:description" content="简单介绍一下gcov和lcovgcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。对可执行文件进行一次运行，即可得到.gcda文件最终，用gcov工具对源代码进行处理，得到.gcov文件，即">
+<meta name="twitter:description" content="背景gcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用">
+<meta name="twitter:image" content="https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md">
 
 
 
@@ -299,20 +301,20 @@
       
 
       
-        <h4><span id="简单介绍一下gcov和lcov">简单介绍一下gcov和lcov</span></h4><p>gcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用<br>在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能<br>在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。<br>对可执行文件进行一次运行，即可得到.gcda文件<br>最终，用gcov工具对源代码进行处理，得到.gcov文件，即为我们需要的覆盖信息的初试状态</p>
+        <h3><span id="背景">背景</span></h3><p>gcov是gcc中的一个附带工具，配合GCC编译进行覆盖测试使用<br><a id="more"></a><br>在gcc编译时，使用-fprofile-arcs  -ftest-coverage两个编译参数，即可使用gcov的功能<br>在编译成功后，会生成.gcno文件，文件来自于编译过程中对目标文件打的桩生成的。<br>对可执行文件进行一次运行，即可得到.gcda文件<br>最终，用gcov工具对源代码进行处理，得到.gcov文件，即为我们需要的覆盖信息的初试状态</p>
 <p>因为gcov生成的是纯文字，不好直观展现，lcov工具就是在gcov的基础上，生成html做了界面化展现。</p>
-<p>我们准备在chromium项目(Cronet)中新增gcov单测覆盖率<br>chromium使用的是Google自研的gn &amp; ninja，前者gn是用于生成类似Makefile的编译文件，后者进行真正的编译，产出对象文件<br>关于chromium的编译可以参考官方文档：<a href="https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md" target="_blank" rel="external">https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md</a><br><a id="more"></a> </p>
-<h4><span id="cronet使用lcov本地跑单测覆盖率">cronet使用lcov本地跑单测覆盖率</span></h4><h6><span id="准备材料">准备材料：</span></h6><ul>
+<p>我们准备在chromium项目(Cronet)中新增gcov单测覆盖率<br>chromium使用的是Google自研的gn &amp; ninja，前者gn是用于生成类似Makefile的编译文件，后者进行真正的编译，产出对象文件<br>关于chromium的编译可以参考官方文档：<img src="https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md" alt="chromium/build-instructions"></p>
+<h3><span id="实现">实现</span></h3><h4><span id="准备材料">准备材料：</span></h4><ul>
 <li>lcov 1.10版本</li>
 <li>gcc 4.8.1及以上版本</li>
 </ul>
-<h6><span id="实现步骤">实现步骤：</span></h6><p>在build.gn中添加全局编译参数</p>
+<h4><span id="实现步骤">实现步骤：</span></h4><p>在build.gn中添加全局编译参数</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//build/config/BUILDCONFIG.gn</span></div><div class="line">  <span class="keyword">if</span> (is_linux &amp;&amp; enable_coverage) &#123;</div><div class="line">	_native_compiler_configs += [ <span class="string">"//build/config:gcov"</span> ]</div><div class="line">	use_sysroot = <span class="literal">false</span></div><div class="line">	assert(!use_sysroot, <span class="string">"sysroot images require clang, so disable it."</span>)</div><div class="line">	assert(is_debug, <span class="string">"Target should be compiled in debug mode."</span>)</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//build/config/BUILD.gn</span></div><div class="line">  config(<span class="string">"gcov"</span>) &#123;</div><div class="line">	cflags = [ <span class="string">"-fprofile-arcs"</span>, <span class="string">"-ftest-coverage"</span> ]</div><div class="line">	libs = [ <span class="string">"gcov"</span> ]</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
 <p>enable_coverage即为全局gcov开关<br>编译的时候，<br>gn args out/default<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">use_sysroot = <span class="literal">false</span></div><div class="line">is_debug = <span class="literal">true</span>  <span class="comment">//打开debug开关</span></div><div class="line">is_clang = <span class="literal">false</span>  <span class="comment">//不适应clang，即用gcc</span></div><div class="line">symbol_level = <span class="number">0</span></div><div class="line">enable_coverage = <span class="literal">true</span>  <span class="comment">//打开gcov开关</span></div></pre></td></tr></table></figure></p>
 <p>执行gcov.sh，本地化lcov工具脚本<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash">/bin/bash</span></div><div class="line">test_model="bdns_unittests"  #需要编译的模块名</div><div class="line">out_dir="./"  #编译输出目录</div><div class="line">COVERAGE_DIR="./out_html"  #lcov输出文件夹</div><div class="line">ninja -C $out_dir -j 11 $test_model  #使用ninja进行编译</div><div class="line">lcov -b ./ -c -i -d ./ -o coverage.init  #使用lcov先跑一遍初始数据（处理gcno，信息输出到coverage.init）</div><div class="line"><span class="meta">$</span><span class="bash">out_dir<span class="variable">$test_model</span> --<span class="built_in">test</span>-launcher-jobs=11 --<span class="built_in">test</span>-launcher-retry-limit=0  <span class="comment">#运行可执行文件</span></span></div><div class="line">lcov  -b ./ -c -d ./ -o coverage.run  #再跑一遍lcov（处理gcda，信息输出到coverage.run）</div><div class="line">lcov -a coverage.init -a coverage.run -o coverage.total  #两个文件合并成coverage.total</div><div class="line">genhtml coverage.total --output-directory $COVERAGE_DIR --title "TurboNet Test Coverage" --show-details   </div><div class="line">--legend  #产出html</div></pre></td></tr></table></figure></p>
 <p>最终，在out_html下就有我们需要的产出，以html形式。</p>
-<h4><span id="踩坑点">踩坑点</span></h4><p>1.pkg-config could not run</p>
+<h3><span id="踩坑点">踩坑点</span></h3><p>1.pkg-config could not run</p>
 <ul>
 <li>chromium为了更好支持跨机器，使用了pkg-config这个编译辅助工具，目的是为了快速找到编译依赖包。</li>
 <li>在配置完gn后，可能会出现xxx.pc无法找到，pkg-config cound not run的错误<br>solution:</li>
@@ -528,7 +530,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">简单介绍一下gcov和lcov</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">cronet使用lcov本地跑单测覆盖率</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#undefined"><span class="nav-number">2.0.1.</span> <span class="nav-text">准备材料：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#undefined"><span class="nav-number">2.0.2.</span> <span class="nav-text">实现步骤：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">踩坑点</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">准备材料：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">实现步骤：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">踩坑点</span></a></li></ol></div>
             
 
           </div>
